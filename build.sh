@@ -1,6 +1,6 @@
 #!/bin/bash
 
-git checkout -b gh-pages
+git checkout gh-pages
 git merge master
 
 for adoc in `find . -name "*.adoc"`
