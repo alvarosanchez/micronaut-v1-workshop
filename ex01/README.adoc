@@ -1,0 +1,16 @@
+== Getting started with the Micronaut CLI (10 minutes)
+
+The Micronaut CLI is the recommended way to create new Micronaut projects. The 
+CLI includes commands for generating specific categories of projects, allowing 
+you to choose between build tools, test frameworks, and even pick the language 
+you wish to use in your application. The CLI also provides commands for generating 
+artifacts such as controllers, client interfaces, and serverless functions.
+
+The `create-app` command is the starting point for creating Micronaut applications.
+The CLI is based on the concept of **profiles**. A profile consist of a project
+template (or skeleton), optional features, and profile-specific commands. Commands 
+from a profile typically are specific to the profile application type; for example, 
+the `service` profile (designed for creation of microservice applications) provides 
+the `create-controller` and `create-client` commands. 
+
+Profiles can be further customised with **features**.
