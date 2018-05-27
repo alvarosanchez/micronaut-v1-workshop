@@ -1,6 +1,6 @@
 #!/bin/bash
-set -e
 git commit -a -m "Updated docs"
+set -e
 git push origin master
 
 asciidoctor -a source-highlighter=pygments README.adoc
