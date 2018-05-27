@@ -270,3 +270,11 @@ Fixtures -> Clubs
 endif::[]
 
 image::images/football-diagram.png[]
+
+In this exercise we are creating the `clubs` microservice. This is the architecture:
+
+icon:hand-o-right[] Create the project:
+
+----
+$ mn create-app clubs -features groovy,hibernate-gorm
+----
