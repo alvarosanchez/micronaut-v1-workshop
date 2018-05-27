@@ -80,6 +80,38 @@ git clone https://github.com/alvarosanchez/ratpack-101.git
 
 NOTE: You will find each exercise's template files on each `exNN` folder. Solution is always inside a `solution` folder. To highlight the actions you actually need to perform, an icon is used: icon:hand-o-right[]
 
+== Application architecture 
+
+Throughout this workshop, we will be creating a football (soccer) management system.
+
+ifdef::generate-diagrams[]
+[plantuml, football-diagram, png]
+....
+together {
+    node Fixtures
+    database Mongo
+}
+
+together {
+    node Clubs
+    database H2
+}
+
+Clubs -> H2
+H2 -[hidden]- Fixtures
+Fixtures -> Mongo
+Fixtures -> Clubs
+....
+endif::[]
+
+image::images/football-diagram.png[]
+
+* `clubs` is the microservice responsible for managing clubs. It uses GORM for
+  Hibernate as a data access layer.
+* `fixtures` manages all game fixtures. For the teams playing in a game, it doesn't
+  store their full details, but rather their ID. It has a service-discovery-enabled
+  HTTP client to fetch club details from the `clubs` microservice.
+
 :numbered:
 
 == Getting started with the Micronaut CLI (15 minutes)
@@ -246,30 +278,6 @@ Hello Galaxy!
 == Creating the Clubs microservice (30 minutes)
 
 TIP: Change to the `ex02` directory to work on this exercise.
-
-Throughout this workshop, we will be creating a football (soccer) management system.
-
-ifdef::generate-diagrams[]
-[plantuml, football-diagram, png]
-....
-together {
-    node Fixtures
-    database Mongo
-}
-
-together {
-    node Clubs
-    database H2
-}
-
-Clubs -> H2
-H2 -[hidden]- Fixtures
-Fixtures -> Mongo
-Fixtures -> Clubs
-....
-endif::[]
-
-image::images/football-diagram.png[]
 
 In this exercise we are creating the `clubs` microservice. This is the architecture:
 
