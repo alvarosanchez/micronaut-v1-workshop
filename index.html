@@ -530,6 +530,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_listing_profiles">1.1. Listing profiles</a></li>
 <li><a href="#_getting_information_about_a_profile">1.2. Getting information about a profile</a></li>
 <li><a href="#_creating_and_running_a_hello_galaxy">1.3. Creating and running a <em>hello galaxy</em></a></li>
+<li><a href="#_write_an_automated_test">1.4. Write an automated test</a></li>
 </ul>
 </li>
 <li><a href="#_creating_the_clubs_microservice_30_minutes">2. Creating the Clubs microservice (30 minutes)</a></li>
@@ -706,9 +707,10 @@ You will find each exercise&#8217;s template files on each <code>exNN</code> fol
 Hibernate as a data access layer.</p>
 </li>
 <li>
-<p><code>fixtures</code> manages all game fixtures. For the teams playing in a game, it doesn&#8217;t
-store their full details, but rather their ID. It has a service-discovery-enabled
-HTTP client to fetch club details from the <code>clubs</code> microservice.</p>
+<p><code>fixtures</code> manages all game fixtures, storing its data in MongoDB. For the
+teams playing in a game, it doesn&#8217;t store their full details, but rather their
+ID. It has a service-discovery-enabled HTTP client to fetch club details from
+the <code>clubs</code> microservice.</p>
 </li>
 </ul>
 </div>
@@ -751,7 +753,8 @@ the <code>create-controller</code> and <code>create-client</code> commands.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>$ mn list-profiles                                                                                     | Available Profiles
+<pre>$ mn list-profiles
+| Available Profiles
 --------------------
 * federation - The federation profile
 * service - The service profile
@@ -785,7 +788,8 @@ use the <code>profile-info</code> command:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>$ mn profile-info service                                                                                Profile: service
+<pre>$ mn profile-info service
+Profile: service
 --------------------
 The service profile
 
@@ -958,6 +962,69 @@ Hello Galaxy!</pre>
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_write_an_automated_test">1.4. Write an automated test</h3>
+<div class="paragraph">
+<p>While testing manually is acceptable in some situations, going forward it is
+better to have automated tests to exercise our applications. Fortunately,
+Micronaut makes testing super easy!</p>
+</div>
+<div class="paragraph">
+<p><span class="icon"><i class="fa fa-hand-o-right"></i></span> Change the generated <code>src/test/groovy/hello/galaxy/HelloControllerSpec.groovy</code>
+to look like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span></span><span class="tok-kd">class</span> <span class="tok-nc">HelloControllerSpec</span> <span class="tok-kd">extends</span> <span class="tok-n">Specification</span> <span class="tok-o">{</span>
+
+    <span class="tok-nd">@Shared</span> <span class="tok-nd">@AutoCleanup</span> <span class="tok-n">EmbeddedServer</span> <span class="tok-n">embeddedServer</span> <span class="tok-o">=</span> <span class="tok-n">ApplicationContext</span><span class="tok-o">.</span><span class="tok-na">run</span><span class="tok-o">(</span><span class="tok-n">EmbeddedServer</span><span class="tok-o">)</span> <i class="conum" data-value="1"></i><b>(1)</b>
+    <span class="tok-nd">@Shared</span> <span class="tok-nd">@AutoCleanup</span> <span class="tok-n">RxHttpClient</span> <span class="tok-n">client</span> <span class="tok-o">=</span> <span class="tok-n">embeddedServer</span><span class="tok-o">.</span><span class="tok-na">applicationContext</span><span class="tok-o">.</span><span class="tok-na">createBean</span><span class="tok-o">(</span><span class="tok-n">RxHttpClient</span><span class="tok-o">,</span> <span class="tok-n">embeddedServer</span><span class="tok-o">.</span><span class="tok-na">getURL</span><span class="tok-o">())</span> <i class="conum" data-value="2"></i><b>(2)</b>
+
+    <span class="tok-kt">void</span> <span class="tok-s2">&quot;test index&quot;</span><span class="tok-o">()</span> <span class="tok-o">{</span>
+        <span class="tok-nl">given:</span>
+        <span class="tok-n">String</span> <span class="tok-n">response</span> <span class="tok-o">=</span> <span class="tok-n">client</span><span class="tok-o">.</span><span class="tok-na">toBlocking</span><span class="tok-o">().</span><span class="tok-na">retrieve</span><span class="tok-o">(</span><span class="tok-s2">&quot;/hello&quot;</span><span class="tok-o">)</span> <i class="conum" data-value="3"></i><b>(3)</b>
+
+        <span class="tok-nl">expect:</span>
+        <span class="tok-n">response</span> <span class="tok-o">==</span> <span class="tok-s2">&quot;Hello Galaxy!&quot;</span>
+    <span class="tok-o">}</span>
+<span class="tok-o">}</span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Running an embedded server</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Obtaining a reactive HTTP client attached to our embedded server</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>As the client is non-blocking by default, we want to block in tests to make sure
+we get a result before the test finishes. Also, the <code>retrieve</code> method returns
+the response as a String.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><span class="icon"><i class="fa fa-hand-o-right"></i></span> Then, run the tests:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>./gradlew test</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once finished, you should see an output similar to:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>BUILD SUCCESSFUL in 6s</pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -991,7 +1058,7 @@ Change to the <code>ex02</code> directory to work on this exercise.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-05-28 00:40:10 CEST
+Last updated 2018-05-28 01:02:59 CEST
 </div>
 </div>
 </body>
