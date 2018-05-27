@@ -1037,28 +1037,96 @@ the response as a String.</td>
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Change to the <code>ex02</code> directory to work on this exercise.
+Change to the <code>ex02/clubs</code> directory to work on this exercise. The project
+has been already created for you, no need to run <code>mn create-app</code> this time.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>In this exercise we are creating the <code>clubs</code> microservice. This is the architecture:</p>
+<p>In this exercise we are creating the <code>clubs</code> microservice.</p>
 </div>
 <div class="paragraph">
-<p><span class="icon"><i class="fa fa-hand-o-right"></i></span> Create the project:</p>
+<p><span class="icon"><i class="fa fa-hand-o-right"></i></span> Let&#8217;s define first a <code>Club</code> domain class under
+<code>src/main/groovy/clubs/domain/Club.groovy</code> with 2 string attributes:
+<code>name</code> (mandatory) and <code>stadium</code> (optional).</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Unlike Grails, when using GORM in Micronaut you need to annotate your
+entities with <code>grails.gorm.annotation.Entity</code>, as in Micronaut there is no
+conventional folder such as <code>grails-app/domain</code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><span class="icon"><i class="fa fa-hand-o-right"></i></span> Next, define a
+<a href="http://gorm.grails.org/latest/hibernate/manual/index.html#dataServices">GORM data service</a>
+named <code>ClubService</code> as an interface with the following operations:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>int count()</code></p>
+</li>
+<li>
+<p><code>Club save(@NotBlank String name, @NotBlank String stadium)</code></p>
+</li>
+<li>
+<p><code>List&lt;Club&gt; findAll()</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><span class="icon"><i class="fa fa-hand-o-right"></i></span> Now, let&#8217;s test our service:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>$ mn create-app clubs -features groovy,hibernate-gorm</pre>
+<pre class="pygments highlight"><code data-lang="groovy"><span></span><span class="tok-kd">class</span> <span class="tok-nc">ClubServiceSpec</span> <span class="tok-kd">extends</span> <span class="tok-n">Specification</span> <span class="tok-o">{</span>
+
+    <span class="tok-nd">@Shared</span> <span class="tok-nd">@AutoCleanup</span> <span class="tok-n">EmbeddedServer</span> <span class="tok-n">embeddedServer</span> <span class="tok-o">=</span> <span class="tok-n">ApplicationContext</span><span class="tok-o">.</span><span class="tok-na">run</span><span class="tok-o">(</span><span class="tok-n">EmbeddedServer</span><span class="tok-o">)</span>
+    <span class="tok-nd">@Shared</span> <span class="tok-n">ClubService</span> <span class="tok-n">service</span> <span class="tok-o">=</span> <span class="tok-n">embeddedServer</span><span class="tok-o">.</span><span class="tok-na">applicationContext</span><span class="tok-o">.</span><span class="tok-na">getBean</span><span class="tok-o">(</span><span class="tok-n">ClubService</span><span class="tok-o">)</span> <i class="conum" data-value="1"></i><b>(1)</b>
+
+    <span class="tok-nd">@Rollback</span>
+    <span class="tok-kt">void</span> <span class="tok-s2">&quot;it can work with clubs&quot;</span><span class="tok-o">()</span> <span class="tok-o">{</span>
+        <span class="tok-nl">expect:</span>
+        <span class="tok-n">service</span><span class="tok-o">.</span><span class="tok-na">count</span><span class="tok-o">()</span> <span class="tok-o">==</span> <span class="tok-mi">0</span>
+
+        <span class="tok-nl">when:</span>
+        <span class="tok-n">service</span><span class="tok-o">.</span><span class="tok-na">save</span><span class="tok-o">(</span><span class="tok-s2">&quot;Real Madrid&quot;</span><span class="tok-o">,</span> <span class="tok-s2">&quot;Bernabeu&quot;</span><span class="tok-o">)</span>
+
+        <span class="tok-nl">then:</span>
+        <span class="tok-n">service</span><span class="tok-o">.</span><span class="tok-na">count</span><span class="tok-o">()</span> <span class="tok-o">==</span> <span class="tok-mi">1</span>
+
+        <span class="tok-nl">when:</span>
+        <span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Club</span><span class="tok-o">&gt;</span> <span class="tok-n">clubs</span> <span class="tok-o">=</span> <span class="tok-n">service</span><span class="tok-o">.</span><span class="tok-na">findAll</span><span class="tok-o">()</span>
+
+        <span class="tok-nl">then:</span>
+        <span class="tok-n">clubs</span><span class="tok-o">.</span><span class="tok-na">size</span><span class="tok-o">()</span> <span class="tok-o">==</span> <span class="tok-mi">1</span>
+    <span class="tok-o">}</span>
+<span class="tok-o">}</span></code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Instead of any kind of injection, we simply get the bean from the application context.</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-05-28 01:02:59 CEST
+Last updated 2018-05-28 01:44:07 CEST
 </div>
 </div>
 </body>
