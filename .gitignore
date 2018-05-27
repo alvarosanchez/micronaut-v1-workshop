@@ -1,1 +1,10 @@
 .asciidoctor/
+.gradle/
+build/
+.classpath
+.project
+.settings/
+bin/
+.idea/
+*.iml
+out/

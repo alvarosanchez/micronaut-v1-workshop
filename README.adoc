@@ -108,9 +108,10 @@ image::football-diagram.png[]
 
 * `clubs` is the microservice responsible for managing clubs. It uses GORM for
   Hibernate as a data access layer.
-* `fixtures` manages all game fixtures. For the teams playing in a game, it doesn't
-  store their full details, but rather their ID. It has a service-discovery-enabled
-  HTTP client to fetch club details from the `clubs` microservice.
+* `fixtures` manages all game fixtures, storing its data in MongoDB. For the 
+  teams playing in a game, it doesn't store their full details, but rather their 
+  ID. It has a service-discovery-enabled HTTP client to fetch club details from 
+  the `clubs` microservice.
 
 :numbered:
 
@@ -136,7 +137,8 @@ the `create-controller` and `create-client` commands.
 icon:hand-o-right[] You can list the available profiles with the `list-profiles` command:
 
 ----
-$ mn list-profiles                                                                                     | Available Profiles
+$ mn list-profiles                                                                                     
+| Available Profiles
 --------------------
 * federation - The federation profile
 * service - The service profile
@@ -156,7 +158,8 @@ icon:hand-o-right[] To see all the features of a profile, you can
 use the `profile-info` command:
 
 ----
-$ mn profile-info service                                                                                Profile: service
+$ mn profile-info service                                                                                
+Profile: service
 --------------------
 The service profile
 
