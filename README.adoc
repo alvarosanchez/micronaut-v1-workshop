@@ -63,6 +63,7 @@ Introductory workshop about http://micronaut.io[Micronaut].
 
 * JDK 8.
 * Git.
+* Docker.
 
 === Clone this repository
 
