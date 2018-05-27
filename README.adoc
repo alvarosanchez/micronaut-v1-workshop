@@ -340,4 +340,32 @@ named `ClubService` as an interface with the following operations:
 * `Club save(@NotBlank String name, @NotBlank String stadium)`
 * `List<Club> findAll()`
 
+icon:hand-o-right[] Now, let's test our service:
 
+[source,groovy]
+----
+class ClubServiceSpec extends Specification {
+
+    @Shared @AutoCleanup EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer)
+    @Shared ClubService service = embeddedServer.applicationContext.getBean(ClubService) // <1>
+
+    @Rollback
+    void "it can work with clubs"() {
+        expect:
+        service.count() == 0
+
+        when:
+        service.save("Real Madrid", "Bernabeu")
+
+        then:
+        service.count() == 1
+
+        when:
+        List<Club> clubs = service.findAll()
+
+        then:
+        clubs.size() == 1
+    }
+}
+----
+<1> Instead of any kind of injection, we simply get the bean from the application context.
