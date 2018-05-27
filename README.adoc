@@ -278,6 +278,45 @@ $ curl 0:8080/hello
 Hello Galaxy!
 ----
 
+=== Write an automated test
+
+While testing manually is acceptable in some situations, going forward it is 
+better to have automated tests to exercise our applications. Fortunately,
+Micronaut makes testing super easy!
+
+icon:hand-o-right[] Change the generated `src/test/groovy/hello/galaxy/HelloControllerSpec.groovy`
+to look like this:
+
+[source,groovy]
+----
+class HelloControllerSpec extends Specification {
+
+    @Shared @AutoCleanup EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer) // <1>
+    @Shared @AutoCleanup RxHttpClient client = embeddedServer.applicationContext.createBean(RxHttpClient, embeddedServer.getURL()) //<2>
+
+    void "test index"() {
+        given:
+        String response = client.toBlocking().retrieve("/hello") //<3>
+
+        expect:
+        response == "Hello Galaxy!"
+    }
+}
+----
+<1> Running an embedded server
+<2> Obtaining a reactive HTTP client attached to our embedded server
+<3> As the client is non-blocking by default, we want to block in tests to make sure 
+    we get a result before the test finishes. Also, the `retrieve` method returns
+    the response as a String.
+
+icon:hand-o-right[] Then, run the tests:
+
+    ./gradlew test
+
+Once finished, you should see an output similar to:
+
+    BUILD SUCCESSFUL in 6s
+
 == Creating the Clubs microservice (30 minutes)
 
 TIP: Change to the `ex02` directory to work on this exercise.
