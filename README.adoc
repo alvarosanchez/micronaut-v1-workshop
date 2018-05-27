@@ -248,6 +248,7 @@ TIP: Change to the `ex02` directory to work on this exercise.
 
 Throughout this workshop, we will be creating a football (soccer) management system.
 
+ifdef::generate-diagrams[]
 [plantuml, football-diagram, png]
 ....
 together {
@@ -265,3 +266,6 @@ H2 -[hidden]- Fixtures
 Fixtures -> Mongo
 Fixtures -> Clubs
 ....
+endif::[]
+
+image::football-diagram.png[]
