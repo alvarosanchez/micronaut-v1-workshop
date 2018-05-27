@@ -269,4 +269,4 @@ Fixtures -> Clubs
 ....
 endif::[]
 
-image::football-diagram.png[]
+image::images/football-diagram.png[]
