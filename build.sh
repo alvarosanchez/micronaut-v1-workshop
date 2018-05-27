@@ -1,5 +1,5 @@
 #!/bin/bash
-set +x
+set -x
 git commit -a -m "Updated docs"
 set -e
 git push origin master
@@ -10,7 +10,7 @@ asciidoctor -r asciidoctor-diagram -a generate-diagrams README.adoc
 #Generate HTML
 asciidoctor -a source-highlighter=pygments README.adoc
 
-git checkout gh-pages
+git checkout -f gh-pages
 mv README.html index.html
 mv *.png images/
 git add -A
