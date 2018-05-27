@@ -12,7 +12,6 @@ asciidoctor -a source-highlighter=pygments README.adoc
 
 git checkout -f gh-pages
 mv README.html index.html
-mv *.png images/
 git add -A
 git commit -m "Updated docs"
 git push origin gh-pages
