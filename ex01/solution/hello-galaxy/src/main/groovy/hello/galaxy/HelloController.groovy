@@ -1,4 +1,4 @@
-package hello.world
+package hello.galaxy
 
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
@@ -10,6 +10,7 @@ class HelloController {
 
     @Get("/")
     String index() {
-        return "Hello Micronauts!"
+        return "Hello Galaxy!"
     }
+    
 }

@@ -164,7 +164,7 @@ Provided Features:
 * tracing-zipkin - Adds support for distributed tracing with Zipkin (https://zipkin.io)
 ----
 
-=== Creating and running a hello world
+=== Creating and running a _hello galaxy_
 
 As explained avobe, the `create-app` command can be used to create new projects.
 It accepts some flags:
@@ -190,25 +190,25 @@ It accepts some flags:
 |`-inplace`
 |===
 
-icon:hand-o-right[] Let's create a hello world project:
+icon:hand-o-right[] Let's create a _hello galaxy_ project:
 
 ----
-mn create-app hello-world -features groovy
-| Application created at /private/tmp/hello-world
+$ mn create-app hello-galaxy -features groovy
+| Application created at /private/tmp/hello-galaxy
 ----
 
-WARNING: Currently https://github.com/micronaut-projects/micronaut-profiles/issues/28[there is a bug]
+WARNING: Currently, https://github.com/micronaut-projects/micronaut-profiles/issues/28[there is a bug]
 in the CLI that makes it generate a main `Application.java` class regardless of 
 the `groovy` feature being selected. However, the main `Application` class can be 
 left as is, and we will work with Groovy with the rest of the project.
 
-icon:hand-o-right[] Now, move into the generated `hello-world` folder and let's 
+icon:hand-o-right[] Now, move into the generated `hello-galaxy` folder and let's 
 create a controller:
 
 ----
 $ mn create-controller hello
-| Rendered template Controller.groovy to destination src/main/groovy/hello/world/HelloController.groovy
-| Rendered template ControllerSpec.groovy to destination src/test/groovy/hello/world/HelloControllerSpec.groovy
+| Rendered template Controller.groovy to destination src/main/groovy/hello/galaxy/HelloController.groovy
+| Rendered template ControllerSpec.groovy to destination src/test/groovy/hello/galaxy/HelloControllerSpec.groovy
 ----
 
 icon:hand-o-right[] Open the generated `HelloController.groovy` with your favourite 
@@ -216,20 +216,9 @@ IDE and make it return "Hello Micronauts!":
 
 [source,groovy]
 ----
-package hello.world
-
-import io.micronaut.http.annotation.Controller
-import io.micronaut.http.annotation.Get
-import io.micronaut.http.HttpStatus
-
-
-@Controller("/hello")
-class HelloController {
-
-    @Get("/")
-    String index() {
-        return "Hello Micronauts!"
-    }
+@Get("/")
+String index() {
+    return "Hello Galaxy!"
 }
 ----
 
@@ -250,11 +239,23 @@ icon:hand-o-right[] Then, on another shell, make a request to your service:
 
 ----
 $ curl 0:8080/hello
-Hello Micronauts!
+Hello Galaxy!
 ----
 
 == Creating the Clubs microservice (30 minutes)
 
 TIP: Change to the `ex02` directory to work on this exercise.
 
-Throghout this workshop we will be creating a football (soccer) management system.
+Throughout this workshop, we will be creating a football (soccer) management system.
+
+[plantuml, diagram-classes, png]
+....
+class BlockProcessor
+class DiagramBlock
+class DitaaBlock
+class PlantUmlBlock
+
+BlockProcessor <|-- DiagramBlock
+DiagramBlock <|-- DitaaBlock
+DiagramBlock <|-- PlantUmlBlock
+....

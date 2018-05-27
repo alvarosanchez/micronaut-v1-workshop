@@ -1,5 +1,5 @@
 profile: service
-defaultPackage: hello.world
+defaultPackage: hello.galaxy
 ---
 testFramework: spock
 sourceLanguage: groovy

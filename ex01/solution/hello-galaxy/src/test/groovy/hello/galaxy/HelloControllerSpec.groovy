@@ -1,4 +1,4 @@
-package hello.world;
+package hello.galaxy;
 
 import io.micronaut.context.ApplicationContext
 import io.micronaut.runtime.server.EmbeddedServer
