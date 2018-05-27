@@ -1,4 +1,5 @@
 #!/bin/bash
+git add *.png
 git commit -a -m "Updated docs"
 set -e
 git push origin master

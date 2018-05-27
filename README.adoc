@@ -248,14 +248,20 @@ TIP: Change to the `ex02` directory to work on this exercise.
 
 Throughout this workshop, we will be creating a football (soccer) management system.
 
-[plantuml, diagram-classes, png]
+[plantuml, football-diagram, png]
 ....
-class BlockProcessor
-class DiagramBlock
-class DitaaBlock
-class PlantUmlBlock
+together {
+    node Fixtures
+    database Mongo
+}
 
-BlockProcessor <|-- DiagramBlock
-DiagramBlock <|-- DitaaBlock
-DiagramBlock <|-- PlantUmlBlock
+together {
+    node Clubs
+    database H2
+}
+
+Clubs -> H2
+H2 -[hidden]- Fixtures
+Fixtures -> Mongo
+Fixtures -> Clubs
 ....
