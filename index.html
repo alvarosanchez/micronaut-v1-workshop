@@ -524,6 +524,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_clone_this_repository">Clone this repository</a></li>
 </ul>
 </li>
+<li><a href="#_application_architecture">Application architecture</a></li>
 <li><a href="#_getting_started_with_the_micronaut_cli_15_minutes">1. Getting started with the Micronaut CLI (15 minutes)</a>
 <ul class="sectlevel2">
 <li><a href="#_listing_profiles">1.1. Listing profiles</a></li>
@@ -684,6 +685,32 @@ You will find each exercise&#8217;s template files on each <code>exNN</code> fol
 </tr>
 </table>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_application_architecture">Application architecture</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Throughout this workshop, we will be creating a football (soccer) management system.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/images/football-diagram.png" alt="football diagram">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>clubs</code> is the microservice responsible for managing clubs. It uses GORM for
+Hibernate as a data access layer.</p>
+</li>
+<li>
+<p><code>fixtures</code> manages all game fixtures. For the teams playing in a game, it doesn&#8217;t
+store their full details, but rather their ID. It has a service-discovery-enabled
+HTTP client to fetch club details from the <code>clubs</code> microservice.</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -949,11 +976,14 @@ Change to the <code>ex02</code> directory to work on this exercise.
 </table>
 </div>
 <div class="paragraph">
-<p>Throughout this workshop, we will be creating a football (soccer) management system.</p>
+<p>In this exercise we are creating the <code>clubs</code> microservice. This is the architecture:</p>
 </div>
-<div class="imageblock">
+<div class="paragraph">
+<p><span class="icon"><i class="fa fa-hand-o-right"></i></span> Create the project:</p>
+</div>
+<div class="listingblock">
 <div class="content">
-<img src="./images/images/football-diagram.png" alt="football diagram">
+<pre>$ mn create-app clubs -features groovy,hibernate-gorm</pre>
 </div>
 </div>
 </div>
@@ -961,7 +991,7 @@ Change to the <code>ex02</code> directory to work on this exercise.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-05-27 19:57:22 CEST
+Last updated 2018-05-28 00:38:00 CEST
 </div>
 </div>
 </body>

@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: javax.el:javax.el-api:2.2.4">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/javax/el/javax.el-api/2.2.4/javax.el-api-2.2.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/javax/el/javax.el-api/2.2.4/javax.el-api-2.2.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
