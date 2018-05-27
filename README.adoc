@@ -1,4 +1,4 @@
-= image:https://raw.githubusercontent.com/micronaut-projects/static-website/gh-pages/images/favicon-32x32.png[] Micronaut Workshop
+= image:https://raw.githubusercontent.com/micronaut-projects/static-website/gh-pages/images/favicon-32x32.png[] https://alvarosanchez.github.io/micronaut-workshop/[Micronaut Workshop]
 Alvaro Sanchez-Mariscal <alvaro.sanchezmariscal@gmail.com>
 :toc: left
 :toclevels: 4
