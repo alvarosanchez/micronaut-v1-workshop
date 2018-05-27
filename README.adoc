@@ -2,7 +2,7 @@
 Alvaro Sanchez-Mariscal <alvaro.sanchezmariscal@gmail.com>
 :toc: left
 :toclevels: 4
-:source-highlighter: prettify
+:source-highlighter: highlightjs
 :icons: font
 
 ++++
@@ -73,8 +73,83 @@ Once done, you can clone this repo:
 git clone https://github.com/alvarosanchez/ratpack-101.git
 ----
 
-You will find each exercise's template files on each `exNN` folder. Solution is always inside a `solution` folder.
+NOTE: You will find each exercise's template files on each `exNN` folder. Solution is always inside a `solution` folder. To highlight the actions you actually need to perform, an icon is used: icon:hand-o-right[]
 
 :numbered:
 
-include::ex01/README.adoc[]
+== Getting started with the Micronaut CLI (10 minutes)
+
+The Micronaut CLI is the recommended way to create new Micronaut projects. The 
+CLI includes commands for generating specific categories of projects, allowing 
+you to choose between build tools, test frameworks, and even pick the language 
+you wish to use in your application. The CLI also provides commands for generating 
+artifacts such as controllers, client interfaces, and serverless functions.
+
+The `create-app` command is the starting point for creating Micronaut applications.
+The CLI is based on the concept of **profiles**. A profile consist of a project
+template (or skeleton), optional features, and profile-specific commands. Commands 
+from a profile typically are specific to the profile application type; for example, 
+the `service` profile (designed for creation of microservice applications) provides 
+the `create-controller` and `create-client` commands.
+
+icon:hand-o-right[] You can list the available profiles with the `list-profiles` command:
+
+----
+$ mn list-profiles                                                                                     | Available Profiles
+--------------------
+* federation - The federation profile
+* service - The service profile
+* base - The base profile
+----
+
+TIP: The Micronaut team is actively working on new profiles, and eventually they 
+will be available.
+
+Applications generated from a profile can be personalised with **features**. A 
+feature further customises the newly created project by adding additional 
+dependencies to the build, more files to the project skeleton, etc. 
+
+icon:hand-o-right[] To see all the features of a profile, you can
+use the `profile-info` command:
+
+----
+$ mn profile-info service                                                                                Profile: service
+--------------------
+The service profile
+
+Provided Commands:
+--------------------
+* help - Prints help information for a specific command
+* create-bean - Creates a singleton bean
+* create-job - Creates a job with scheduled method
+* create-client - Creates a client interface
+* create-controller - Creates a controller and associated test
+
+Provided Features:
+--------------------
+* config-consul - Adds support for Distributed Configuration with Consul (https://www.consul.io)
+* discovery-consul - Adds support for Service Discovery with Consul (https://www.consul.io)
+* discovery-eureka - Adds support for Service Discovery with Eureka
+* groovy - Adds support for Groovy in the application
+* hibernate-gorm - Adds support for GORM persistence framework
+* hibernate-jpa - Adds support for Hibernate/JPA
+* http-client - Adds support for creating HTTP clients
+* http-server - Adds support for running a Netty server
+* java - Adds support for Java in the application
+* jdbc-dbcp - Configures SQL DataSource instances using Commons DBCP
+* jdbc-hikari - Configures SQL DataSource instances using Hikari Connection Pool
+* jdbc-tomcat - Configures SQL DataSource instances using Tomcat Connection Pool
+* junit - Adds support for the JUnit testing framework
+* kotlin - Adds support for Kotlin in the application
+* mongo-gorm - Configures GORM for MongoDB for Groovy applications
+* mongo-reactive - Adds support for the Mongo Reactive Streams Driver
+* neo4j-bolt - Adds support for the Neo4j Bolt Driver
+* neo4j-gorm - Configures GORM for Neo4j for Groovy applications
+* redis-lettuce - Configures the Lettuce driver for Redis
+* security-jwt - Adds support for JWT (JSON Web Token) based Authentication
+* security-session - Adds support for Session based Authentication
+* spek - Adds support for the Spek testing framewokr
+* spock - Adds support for the Spock testing framework
+* tracing-jaeger - Adds support for distributed tracing with Jaeger (https://www.jaegertracing.io)
+* tracing-zipkin - Adds support for distributed tracing with Zipkin (https://zipkin.io)
+----
