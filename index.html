@@ -521,11 +521,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_option_2_from_a_zip_file">Option 2: from a ZIP file</a></li>
 </ul>
 </li>
-<li><a href="#_other_requirements">Other requirements</a></li>
 <li><a href="#_clone_this_repository">Clone this repository</a></li>
 </ul>
 </li>
-<li><a href="#_getting_started_with_the_micronaut_cli_10_minutes">1. Getting started with the Micronaut CLI (10 minutes)</a></li>
+<li><a href="#_getting_started_with_the_micronaut_cli_15_minutes">1. Getting started with the Micronaut CLI (15 minutes)</a>
+<ul class="sectlevel2">
+<li><a href="#_listing_profiles">1.1. Listing profiles</a></li>
+<li><a href="#_getting_information_about_a_profile">1.2. Getting information about a profile</a></li>
+<li><a href="#_creating_and_running_a_hello_world">1.3. Creating and running a hello world</a></li>
+</ul>
+</li>
+<li><a href="#_creating_the_clubs_microservice_30_minutes">2. Creating the Clubs microservice (30 minutes)</a></li>
 </ul>
 </div>
 </div>
@@ -541,6 +547,38 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="_software_requirements">Software Requirements</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>In order to do this workshop, you need the following:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Linux or MacOS with shell access, and the following installed:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>curl</code>.</p>
+</li>
+<li>
+<p><code>wget</code>.</p>
+</li>
+<li>
+<p><code>unzip</code>.</p>
+</li>
+<li>
+<p><code>git</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>JDK 8.</p>
+</li>
+<li>
+<p>Docker.</p>
+</li>
+</ul>
+</div>
 <div class="sect2">
 <h3 id="_micronaut_cli">Micronaut CLI</h3>
 <div class="sect3">
@@ -625,22 +663,6 @@ Archive:  micronaut-cli.zip
 </div>
 </div>
 <div class="sect2">
-<h3 id="_other_requirements">Other requirements</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>JDK 8.</p>
-</li>
-<li>
-<p>Git.</p>
-</li>
-<li>
-<p>Docker.</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
 <h3 id="_clone_this_repository">Clone this repository</h3>
 <div class="paragraph">
 <p>Once done, you can clone this repo:</p>
@@ -666,8 +688,20 @@ You will find each exercise&#8217;s template files on each <code>exNN</code> fol
 </div>
 </div>
 <div class="sect1">
-<h2 id="_getting_started_with_the_micronaut_cli_10_minutes">1. Getting started with the Micronaut CLI (10 minutes)</h2>
+<h2 id="_getting_started_with_the_micronaut_cli_15_minutes">1. Getting started with the Micronaut CLI (15 minutes)</h2>
 <div class="sectionbody">
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Change to the <code>ex01</code> directory to work on this exercise
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>The Micronaut CLI is the recommended way to create new Micronaut projects. The
 CLI includes commands for generating specific categories of projects, allowing
@@ -683,6 +717,8 @@ from a profile typically are specific to the profile application type; for examp
 the <code>service</code> profile (designed for creation of microservice applications) provides
 the <code>create-controller</code> and <code>create-client</code> commands.</p>
 </div>
+<div class="sect2">
+<h3 id="_listing_profiles">1.1. Listing profiles</h3>
 <div class="paragraph">
 <p><span class="icon"><i class="fa fa-hand-o-right"></i></span> You can list the available profiles with the <code>list-profiles</code> command:</p>
 </div>
@@ -713,6 +749,9 @@ will be available.
 feature further customises the newly created project by adding additional
 dependencies to the build, more files to the project skeleton, etc.</p>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_getting_information_about_a_profile">1.2. Getting information about a profile</h3>
 <div class="paragraph">
 <p><span class="icon"><i class="fa fa-hand-o-right"></i></span> To see all the features of a profile, you can
 use the <code>profile-info</code> command:</p>
@@ -761,11 +800,174 @@ Provided Features:
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_creating_and_running_a_hello_world">1.3. Creating and running a hello world</h3>
+<div class="paragraph">
+<p>As explained avobe, the <code>create-app</code> command can be used to create new projects.
+It accepts some flags:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. Create-App Flags</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Flag</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>build</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Build tool (one of <code>gradle</code>, <code>maven</code> - default is <code>gradle</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-build maven</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>profile</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Profile to use for the project (default is <code>service</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-profile function-aws</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>features</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Features to use for the project, comma-separated</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-features security-jwt,mongo-gorm</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>inplace</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If present, generates the project in the current directory (project name is optional if this flag is set)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-inplace</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><span class="icon"><i class="fa fa-hand-o-right"></i></span> Let&#8217;s create a hello world project:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>mn create-app hello-world -features groovy
+| Application created at /private/tmp/hello-world</pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Currently <a href="https://github.com/micronaut-projects/micronaut-profiles/issues/28">there is a bug</a>
+in the CLI that makes it generate a main <code>Application.java</code> class regardless of
+the <code>groovy</code> feature being selected. However, the main <code>Application</code> class can be
+left as is, and we will work with Groovy with the rest of the project.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><span class="icon"><i class="fa fa-hand-o-right"></i></span> Now, move into the generated <code>hello-world</code> folder and let&#8217;s
+create a controller:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ mn create-controller hello
+| Rendered template Controller.groovy to destination src/main/groovy/hello/world/HelloController.groovy
+| Rendered template ControllerSpec.groovy to destination src/test/groovy/hello/world/HelloControllerSpec.groovy</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><span class="icon"><i class="fa fa-hand-o-right"></i></span> Open the generated <code>HelloController.groovy</code> with your favourite
+IDE and make it return "Hello Micronauts!":</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span></span><span class="tok-kn">package</span> <span class="tok-n">hello</span><span class="tok-o">.</span><span class="tok-na">world</span>
+
+<span class="tok-kn">import</span> <span class="tok-nn">io.micronaut.http.annotation.Controller</span>
+<span class="tok-kn">import</span> <span class="tok-nn">io.micronaut.http.annotation.Get</span>
+<span class="tok-kn">import</span> <span class="tok-nn">io.micronaut.http.HttpStatus</span>
+
+
+<span class="tok-nd">@Controller</span><span class="tok-o">(</span><span class="tok-s2">&quot;/hello&quot;</span><span class="tok-o">)</span>
+<span class="tok-kd">class</span> <span class="tok-nc">HelloController</span> <span class="tok-o">{</span>
+
+    <span class="tok-nd">@Get</span><span class="tok-o">(</span><span class="tok-s2">&quot;/&quot;</span><span class="tok-o">)</span>
+    <span class="tok-n">String</span> <span class="tok-nf">index</span><span class="tok-o">()</span> <span class="tok-o">{</span>
+        <span class="tok-k">return</span> <span class="tok-s2">&quot;Hello Micronauts!&quot;</span>
+    <span class="tok-o">}</span>
+<span class="tok-o">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><span class="icon"><i class="fa fa-hand-o-right"></i></span> Now, run the application:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ MICRONAUT_SERVER_PORT=8080 ./gradlew run</pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Micronaut by default runs on a random port. This helps running multiple
+instances of a service. However, the port can be easily fixed by setting a
+configuration variable, or simply by exposing an environment variable as we
+did with <code>MICRONAUT_SERVER_PORT=8080</code>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>You will see a line similar to the following once the application has started</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>14:40:01.187 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 957ms. Server Running: http://localhost:8080</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><span class="icon"><i class="fa fa-hand-o-right"></i></span> Then, on another shell, make a request to your service:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ curl 0:8080/hello
+Hello Micronauts!</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_creating_the_clubs_microservice_30_minutes">2. Creating the Clubs microservice (30 minutes)</h2>
+<div class="sectionbody">
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Change to the <code>ex02</code> directory to work on this exercise.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Throghout this workshop we will be creating a football (soccer) management system.</p>
+</div>
+</div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-05-27 13:10:46 CEST
+Last updated 2018-05-27 17:41:07 CEST
 </div>
 </div>
 </body>
