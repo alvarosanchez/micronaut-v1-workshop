@@ -104,7 +104,7 @@ Fixtures -> Clubs
 ....
 endif::[]
 
-image::images/football-diagram.png[]
+image::football-diagram.png[]
 
 * `clubs` is the microservice responsible for managing clubs. It uses GORM for
   Hibernate as a data access layer.
