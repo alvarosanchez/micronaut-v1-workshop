@@ -13,6 +13,16 @@ Introductory workshop about http://micronaut.io[Micronaut].
 
 == Software Requirements
 
+In order to do this workshop, you need the following:
+
+* Linux or MacOS with shell access, and the following installed:
+    - `curl`.
+    - `wget`.
+    - `unzip`.
+    - `git`.
+* JDK 8.
+* Docker.
+
 === Micronaut CLI
 
 ==== Option 1 (recommended): using SDKMAN!
@@ -59,12 +69,6 @@ Introductory workshop about http://micronaut.io[Micronaut].
     | Groovy Version: 2.5.0-rc-3
     | JVM Version: 1.8.0_131
 
-=== Other requirements
-
-* JDK 8.
-* Git.
-* Docker.
-
 === Clone this repository
 
 Once done, you can clone this repo:
@@ -77,7 +81,9 @@ NOTE: You will find each exercise's template files on each `exNN` folder. Soluti
 
 :numbered:
 
-== Getting started with the Micronaut CLI (10 minutes)
+== Getting started with the Micronaut CLI (15 minutes)
+
+TIP: Change to the `ex01` directory to work on this exercise
 
 The Micronaut CLI is the recommended way to create new Micronaut projects. The 
 CLI includes commands for generating specific categories of projects, allowing 
@@ -91,6 +97,8 @@ template (or skeleton), optional features, and profile-specific commands. Comman
 from a profile typically are specific to the profile application type; for example, 
 the `service` profile (designed for creation of microservice applications) provides 
 the `create-controller` and `create-client` commands.
+
+=== Listing profiles
 
 icon:hand-o-right[] You can list the available profiles with the `list-profiles` command:
 
@@ -107,7 +115,9 @@ will be available.
 
 Applications generated from a profile can be personalised with **features**. A 
 feature further customises the newly created project by adding additional 
-dependencies to the build, more files to the project skeleton, etc. 
+dependencies to the build, more files to the project skeleton, etc.
+
+=== Getting information about a profile
 
 icon:hand-o-right[] To see all the features of a profile, you can
 use the `profile-info` command:
@@ -153,3 +163,98 @@ Provided Features:
 * tracing-jaeger - Adds support for distributed tracing with Jaeger (https://www.jaegertracing.io)
 * tracing-zipkin - Adds support for distributed tracing with Zipkin (https://zipkin.io)
 ----
+
+=== Creating and running a hello world
+
+As explained avobe, the `create-app` command can be used to create new projects.
+It accepts some flags:
+
+.Create-App Flags
+|===
+|Flag|Description|Example
+
+|`build`
+|Build tool (one of `gradle`, `maven` - default is `gradle`)
+|`-build maven`
+
+|`profile`
+|Profile to use for the project (default is `service`)
+|`-profile function-aws`
+
+|`features`
+|Features to use for the project, comma-separated
+|`-features security-jwt,mongo-gorm`
+
+|`inplace`
+|If present, generates the project in the current directory (project name is optional if this flag is set)
+|`-inplace`
+|===
+
+icon:hand-o-right[] Let's create a hello world project:
+
+----
+mn create-app hello-world -features groovy
+| Application created at /private/tmp/hello-world
+----
+
+WARNING: Currently https://github.com/micronaut-projects/micronaut-profiles/issues/28[there is a bug]
+in the CLI that makes it generate a main `Application.java` class regardless of 
+the `groovy` feature being selected. However, the main `Application` class can be 
+left as is, and we will work with Groovy with the rest of the project.
+
+icon:hand-o-right[] Now, move into the generated `hello-world` folder and let's 
+create a controller:
+
+----
+$ mn create-controller hello
+| Rendered template Controller.groovy to destination src/main/groovy/hello/world/HelloController.groovy
+| Rendered template ControllerSpec.groovy to destination src/test/groovy/hello/world/HelloControllerSpec.groovy
+----
+
+icon:hand-o-right[] Open the generated `HelloController.groovy` with your favourite 
+IDE and make it return "Hello Micronauts!":
+
+[source,groovy]
+----
+package hello.world
+
+import io.micronaut.http.annotation.Controller
+import io.micronaut.http.annotation.Get
+import io.micronaut.http.HttpStatus
+
+
+@Controller("/hello")
+class HelloController {
+
+    @Get("/")
+    String index() {
+        return "Hello Micronauts!"
+    }
+}
+----
+
+icon:hand-o-right[] Now, run the application:
+
+    $ MICRONAUT_SERVER_PORT=8080 ./gradlew run
+
+TIP: Micronaut by default runs on a random port. This helps running multiple 
+instances of a service. However, the port can be easily fixed by setting a
+configuration variable, or simply by exposing an environment variable as we
+did with `MICRONAUT_SERVER_PORT=8080`
+
+You will see a line similar to the following once the application has started
+
+    14:40:01.187 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 957ms. Server Running: http://localhost:8080
+
+icon:hand-o-right[] Then, on another shell, make a request to your service:
+
+----
+$ curl 0:8080/hello
+Hello Micronauts!
+----
+
+== Creating the Clubs microservice (30 minutes)
+
+TIP: Change to the `ex02` directory to work on this exercise.
+
+Throghout this workshop we will be creating a football (soccer) management system.
