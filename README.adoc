@@ -319,12 +319,25 @@ Once finished, you should see an output similar to:
 
 == Creating the Clubs microservice (30 minutes)
 
-TIP: Change to the `ex02` directory to work on this exercise.
+TIP: Change to the `ex02/clubs` directory to work on this exercise. The project 
+has been already created for you, no need to run `mn create-app` this time.
 
-In this exercise we are creating the `clubs` microservice. This is the architecture:
+In this exercise we are creating the `clubs` microservice.
 
-icon:hand-o-right[] Create the project:
+icon:hand-o-right[] Let's define first a `Club` domain class under
+`src/main/groovy/clubs/domain/Club.groovy` with 2 string attributes:
+`name` (mandatory) and `stadium` (optional).
 
-----
-$ mn create-app clubs -features groovy,hibernate-gorm
-----
+WARNING: Unlike Grails, when using GORM in Micronaut you need to annotate your
+entities with `grails.gorm.annotation.Entity`, as in Micronaut there is no
+conventional folder such as `grails-app/domain`.
+
+icon:hand-o-right[] Next, define a 
+http://gorm.grails.org/latest/hibernate/manual/index.html#dataServices[GORM data service]
+named `ClubService` as an interface with the following operations:
+
+* `int count()`
+* `Club save(@NotBlank String name, @NotBlank String stadium)`
+* `List<Club> findAll()`
+
+

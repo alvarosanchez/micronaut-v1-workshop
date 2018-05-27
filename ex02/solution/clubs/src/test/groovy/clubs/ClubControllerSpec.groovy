@@ -2,24 +2,36 @@ package clubs
 
 import clubs.client.ClubsClient
 import clubs.domain.Club
-import grails.gorm.transactions.Rollback;
+import clubs.service.ClubService
+import grails.gorm.transactions.Transactional
 import io.micronaut.context.ApplicationContext
 import io.micronaut.runtime.server.EmbeddedServer
 import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification
 
-@Rollback
 class ClubControllerSpec extends Specification {
 
     @Shared @AutoCleanup EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer)
     @Shared ClubsClient client = embeddedServer.applicationContext.getBean(ClubsClient)
+    @Shared ClubService service = embeddedServer.applicationContext.getBean(ClubService)
+
+    @Transactional
+    void setup() {
+        service.save("Real Madrid CF", "Santiago Bernabeu")
+        service.save("FC Barcelona", "Camp Nou")
+    }
+
+    @Transactional
+    void cleanupSpec() {
+        Club.list()*.delete()
+    }
 
     void "test index"() {
-        given:
+        when:
         List<Club> response = client.listClubs()
 
-        expect:
+        then:
         response.size() == 2
     }
 }
