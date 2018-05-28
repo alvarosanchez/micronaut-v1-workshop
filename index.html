@@ -527,13 +527,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_application_architecture">Application architecture</a></li>
 <li><a href="#_getting_started_with_the_micronaut_cli_15_minutes">1. Getting started with the Micronaut CLI (15 minutes)</a>
 <ul class="sectlevel2">
-<li><a href="#_listing_profiles">1.1. Listing profiles</a></li>
-<li><a href="#_getting_information_about_a_profile">1.2. Getting information about a profile</a></li>
-<li><a href="#_creating_and_running_a_hello_galaxy">1.3. Creating and running a <em>hello galaxy</em></a></li>
-<li><a href="#_write_an_automated_test">1.4. Write an automated test</a></li>
+<li><a href="#_listing_profiles_x_minutes">1.1. Listing profiles (X minutes)</a></li>
+<li><a href="#_getting_information_about_a_profile_x_minutes">1.2. Getting information about a profile (X minutes)</a></li>
+<li><a href="#_creating_and_running_a_hello_galaxy_x_minutes">1.3. Creating and running a <em>hello galaxy</em> (X minutes)</a></li>
+<li><a href="#_write_an_automated_test_x_minutes">1.4. Write an automated test (X minutes)</a></li>
 </ul>
 </li>
-<li><a href="#_creating_the_clubs_microservice_30_minutes">2. Creating the Clubs microservice (30 minutes)</a></li>
+<li><a href="#_creating_the_clubs_microservice_30_minutes">2. Creating the Clubs microservice (30 minutes)</a>
+<ul class="sectlevel2">
+<li><a href="#_gorm_layer_x_minutes">2.1. GORM layer (X minutes)</a></li>
+<li><a href="#_rest_api_x_minutes">2.2. REST API (X minutes)</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -577,7 +582,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>JDK 8.</p>
 </li>
 <li>
-<p>Docker.</p>
+<p>Docker. Please pull the following images before attending the workshop:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>consul</code>.</p>
+</li>
+<li>
+<p><code>mongo</code>.</p>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div>
@@ -747,7 +762,7 @@ the <code>service</code> profile (designed for creation of microservice applicat
 the <code>create-controller</code> and <code>create-client</code> commands.</p>
 </div>
 <div class="sect2">
-<h3 id="_listing_profiles">1.1. Listing profiles</h3>
+<h3 id="_listing_profiles_x_minutes">1.1. Listing profiles (X minutes)</h3>
 <div class="paragraph">
 <p><span class="icon"><i class="fa fa-hand-o-right"></i></span> You can list the available profiles with the <code>list-profiles</code> command:</p>
 </div>
@@ -781,7 +796,7 @@ dependencies to the build, more files to the project skeleton, etc.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_getting_information_about_a_profile">1.2. Getting information about a profile</h3>
+<h3 id="_getting_information_about_a_profile_x_minutes">1.2. Getting information about a profile (X minutes)</h3>
 <div class="paragraph">
 <p><span class="icon"><i class="fa fa-hand-o-right"></i></span> To see all the features of a profile, you can
 use the <code>profile-info</code> command:</p>
@@ -832,7 +847,7 @@ Provided Features:
 </div>
 </div>
 <div class="sect2">
-<h3 id="_creating_and_running_a_hello_galaxy">1.3. Creating and running a <em>hello galaxy</em></h3>
+<h3 id="_creating_and_running_a_hello_galaxy_x_minutes">1.3. Creating and running a <em>hello galaxy</em> (X minutes)</h3>
 <div class="paragraph">
 <p>As explained avobe, the <code>create-app</code> command can be used to create new projects.
 It accepts some flags:</p>
@@ -963,7 +978,7 @@ Hello Galaxy!</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_write_an_automated_test">1.4. Write an automated test</h3>
+<h3 id="_write_an_automated_test_x_minutes">1.4. Write an automated test (X minutes)</h3>
 <div class="paragraph">
 <p>While testing manually is acceptable in some situations, going forward it is
 better to have automated tests to exercise our applications. Fortunately,
@@ -1046,6 +1061,8 @@ has been already created for you, no need to run <code>mn create-app</code> this
 <div class="paragraph">
 <p>In this exercise we are creating the <code>clubs</code> microservice.</p>
 </div>
+<div class="sect2">
+<h3 id="_gorm_layer_x_minutes">2.1. GORM layer (X minutes)</h3>
 <div class="paragraph">
 <p><span class="icon"><i class="fa fa-hand-o-right"></i></span> Let&#8217;s define first a <code>Club</code> domain class under
 <code>src/main/groovy/clubs/domain/Club.groovy</code> with 2 string attributes:
@@ -1070,36 +1087,31 @@ conventional folder such as <code>grails-app/domain</code>.
 <a href="http://gorm.grails.org/latest/hibernate/manual/index.html#dataServices">GORM data service</a>
 named <code>ClubService</code> as an interface with the following operations:</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>int count()</code></p>
-</li>
-<li>
-<p><code>Club save(@NotBlank String name, @NotBlank String stadium)</code></p>
-</li>
-<li>
-<p><code>List&lt;Club&gt; findAll()</code></p>
-</li>
-</ul>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span></span><span class="tok-kt">int</span> <span class="tok-nf">count</span><span class="tok-o">()</span>
+<span class="tok-n">Club</span> <span class="tok-nf">save</span><span class="tok-o">(</span><span class="tok-nd">@NotBlank</span> <span class="tok-n">String</span> <span class="tok-n">name</span><span class="tok-o">,</span> <span class="tok-nd">@NotBlank</span> <span class="tok-n">String</span> <span class="tok-n">stadium</span><span class="tok-o">)</span>
+<span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Club</span><span class="tok-o">&gt;</span> <span class="tok-n">findAll</span><span class="tok-o">()</span>
+<span class="tok-n">Club</span> <span class="tok-nf">find</span><span class="tok-o">(</span><span class="tok-nd">@NotNull</span> <span class="tok-n">Long</span> <span class="tok-n">id</span><span class="tok-o">)</span></code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p><span class="icon"><i class="fa fa-hand-o-right"></i></span> Now, let&#8217;s test our service:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="groovy"><span></span><span class="tok-kd">class</span> <span class="tok-nc">ClubServiceSpec</span> <span class="tok-kd">extends</span> <span class="tok-n">Specification</span> <span class="tok-o">{</span>
+<pre class="pygments highlight"><code data-lang="groovy"><span></span><span class="tok-nd">@Rollback</span>
+<span class="tok-kd">class</span> <span class="tok-nc">ClubServiceSpec</span> <span class="tok-kd">extends</span> <span class="tok-n">Specification</span> <span class="tok-o">{</span>
 
     <span class="tok-nd">@Shared</span> <span class="tok-nd">@AutoCleanup</span> <span class="tok-n">EmbeddedServer</span> <span class="tok-n">embeddedServer</span> <span class="tok-o">=</span> <span class="tok-n">ApplicationContext</span><span class="tok-o">.</span><span class="tok-na">run</span><span class="tok-o">(</span><span class="tok-n">EmbeddedServer</span><span class="tok-o">)</span>
     <span class="tok-nd">@Shared</span> <span class="tok-n">ClubService</span> <span class="tok-n">service</span> <span class="tok-o">=</span> <span class="tok-n">embeddedServer</span><span class="tok-o">.</span><span class="tok-na">applicationContext</span><span class="tok-o">.</span><span class="tok-na">getBean</span><span class="tok-o">(</span><span class="tok-n">ClubService</span><span class="tok-o">)</span> <i class="conum" data-value="1"></i><b>(1)</b>
 
-    <span class="tok-nd">@Rollback</span>
     <span class="tok-kt">void</span> <span class="tok-s2">&quot;it can work with clubs&quot;</span><span class="tok-o">()</span> <span class="tok-o">{</span>
         <span class="tok-nl">expect:</span>
         <span class="tok-n">service</span><span class="tok-o">.</span><span class="tok-na">count</span><span class="tok-o">()</span> <span class="tok-o">==</span> <span class="tok-mi">0</span>
 
         <span class="tok-nl">when:</span>
-        <span class="tok-n">service</span><span class="tok-o">.</span><span class="tok-na">save</span><span class="tok-o">(</span><span class="tok-s2">&quot;Real Madrid&quot;</span><span class="tok-o">,</span> <span class="tok-s2">&quot;Bernabeu&quot;</span><span class="tok-o">)</span>
+        <span class="tok-n">service</span><span class="tok-o">.</span><span class="tok-na">save</span><span class="tok-o">(</span><span class="tok-s2">&quot;Real Madrid CF&quot;</span><span class="tok-o">,</span> <span class="tok-s2">&quot;Bernabeu&quot;</span><span class="tok-o">)</span>
 
         <span class="tok-nl">then:</span>
         <span class="tok-n">service</span><span class="tok-o">.</span><span class="tok-na">count</span><span class="tok-o">()</span> <span class="tok-o">==</span> <span class="tok-mi">1</span>
@@ -1109,6 +1121,18 @@ named <code>ClubService</code> as an interface with the following operations:</p
 
         <span class="tok-nl">then:</span>
         <span class="tok-n">clubs</span><span class="tok-o">.</span><span class="tok-na">size</span><span class="tok-o">()</span> <span class="tok-o">==</span> <span class="tok-mi">1</span>
+    <span class="tok-o">}</span>
+
+    <span class="tok-kt">void</span> <span class="tok-s2">&quot;it can show a club&quot;</span><span class="tok-o">()</span> <span class="tok-o">{</span>
+        <span class="tok-nl">given:</span>
+        <span class="tok-n">Club</span> <span class="tok-n">club</span> <span class="tok-o">=</span> <span class="tok-n">service</span><span class="tok-o">.</span><span class="tok-na">save</span><span class="tok-o">(</span><span class="tok-s2">&quot;CD Leganes&quot;</span><span class="tok-o">,</span> <span class="tok-s2">&quot;Butarque&quot;</span><span class="tok-o">)</span>
+
+        <span class="tok-nl">when:</span>
+        <span class="tok-n">service</span><span class="tok-o">.</span><span class="tok-na">find</span><span class="tok-o">(</span><span class="tok-n">club</span><span class="tok-o">.</span><span class="tok-na">id</span><span class="tok-o">)</span>
+
+        <span class="tok-nl">then:</span>
+        <span class="tok-n">club</span><span class="tok-o">.</span><span class="tok-na">name</span> <span class="tok-o">==</span> <span class="tok-s2">&quot;CD Leganes&quot;</span>
+        <span class="tok-n">club</span><span class="tok-o">.</span><span class="tok-na">stadium</span> <span class="tok-o">==</span> <span class="tok-s2">&quot;Butarque&quot;</span>
     <span class="tok-o">}</span>
 <span class="tok-o">}</span></code></pre>
 </div>
@@ -1122,11 +1146,24 @@ named <code>ClubService</code> as an interface with the following operations:</p
 </table>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_rest_api_x_minutes">2.2. REST API (X minutes)</h3>
+<div class="paragraph">
+<p>Micronaut helps you writing both the client and server sides of a REST API. In this service,
+we are going to create the following:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/clubs-diagram.png" alt="clubs diagram">
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-05-28 01:44:07 CEST
+Last updated 2018-05-28 02:36:21 CEST
 </div>
 </div>
 </body>
