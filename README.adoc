@@ -63,7 +63,7 @@ In order to do this workshop, you need the following:
 
 3. Link the `mn` command-line into a directory belonging to your `$PATH` (eg: `/usr/local/bin`):
 
-    $ ln -s /usr/local/micronaut/bin/mn /usr/local/bin/
+    $ sudo ln -s /usr/local/micronaut/bin/mn /usr/local/bin/
 
 4. Ensure the CLI is installed properly:
 
@@ -77,7 +77,7 @@ In order to do this workshop, you need the following:
 Once done, you can clone this repo:
 
 ----
-git clone https://github.com/alvarosanchez/ratpack-101.git
+git clone https://github.com/alvarosanchez/micronaut-workshop.git
 ----
 
 NOTE: You will find each exercise's template files on each `exNN` folder. Solution is always inside a `solution` folder. To highlight the actions you actually need to perform, an icon is used: icon:hand-o-right[]
