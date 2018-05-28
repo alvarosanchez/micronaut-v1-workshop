@@ -44,11 +44,15 @@ In order to do this workshop, you need the following:
 
 ==== Option 2: from a ZIP file
 
-1. Grab the latest `-dist.zip` file from https://oss.sonatype.org/content/groups/public/io/micronaut/cli/1.0.0-SNAPSHOT/[]:
+1. Clone https://github.com/micronaut-projects/micronaut-profiles/[this repo] on your computer, and run:
+
+    ./gradlew publishToMavenLocal
+
+2. Grab the latest `-dist.zip` file from https://oss.sonatype.org/content/groups/public/io/micronaut/cli/1.0.0-SNAPSHOT/[]:
 
     $ wget https://oss.sonatype.org/content/groups/public/io/micronaut/cli/1.0.0-SNAPSHOT/cli-1.0.0-20180526.063403-21-dist.zip -O micronaut-cli.zip
 
-2. Unzip it under a desired location (eg: `/usr/local/micronaut`):
+3. Unzip it under a desired location (eg: `/usr/local/micronaut`):
 
     $ sudo unzip micronaut-cli.zip -d /usr/local/micronaut
     Password:
@@ -61,11 +65,11 @@ In order to do this workshop, you need the following:
       creating: /usr/local/micronaut/media/
       inflating: /usr/local/micronaut/media/mn.icns
 
-3. Link the `mn` command-line into a directory belonging to your `$PATH` (eg: `/usr/local/bin`):
+4. Link the `mn` command-line into a directory belonging to your `$PATH` (eg: `/usr/local/bin`):
 
     $ sudo ln -s /usr/local/micronaut/bin/mn /usr/local/bin/
 
-4. Ensure the CLI is installed properly:
+5. Ensure the CLI is installed properly:
 
     $ mn --version
     | Micronaut Version: 1.0.0-SNAPSHOT
@@ -304,7 +308,7 @@ Once finished, you should see an output similar to:
 
     BUILD SUCCESSFUL in 6s
 
-== Creating the Clubs microservice (30 minutes)
+== Creating the Clubs microservice (45 minutes)
 
 TIP: Change to the `ex02/clubs` directory to work on this exercise. The project 
 has been already created for you, no need to run `mn create-app` this time.
@@ -329,6 +333,9 @@ named `ClubService` as an interface with the following operations:
 ----
 include::./ex02/solution/clubs/src/main/groovy/clubs/service/ClubService.groovy[tag=operations,indent=0]
 ----
+
+TIP: GORM Data Services are annotated with `grails.gorm.services.Service`, taking
+as an argument the entity they operate with. In this case, it would be `@Service(Club)`.
 
 icon:hand-o-right[] Now, let's test our service:
 
@@ -464,3 +471,29 @@ image::consul.png[]
 icon:hand-o-right[] You can run yet another instance of `clubs` on a different
 shell, and see it registered. We will use them both with Micronaut's load-balanced
 HTTP client in the next exercise.
+
+== Creating the Fixtures microservice (45 minutes)
+
+TIP: Change to the `ex03/fixtures` directory to work on this exercise.
+
+In this exercise we are creating the `fixtures` microservice.
+
+=== GORM layer (X minutes)
+
+* Run Mongo locally?
+* Fixture domain class
+* FixtureService GORM Data Service.
+* Tests
+
+=== REST API (X minutes)
+
+* ClubsClient HTTP client.
+* FixtureView DTO.
+* FixtureController.
+* Tests.
+
+=== Load some data for production (X minutes)
+
+* DataLoader
+
+=== See it in action (X minutes)
