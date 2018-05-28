@@ -17,4 +17,12 @@ dataSource:
   jmxExport: true
   driverClassName: org.h2.Driver
   username: sa
-  password: ''       
+  password: ''
+#tag::consul[]
+---
+consul:
+  client:
+    registration:
+      enabled: true
+  defaultZone: "${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"
+#end::consul[]

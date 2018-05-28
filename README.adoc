@@ -360,7 +360,7 @@ endif::[]
 
 image::clubs-diagram.png[]
 
-icon:hand-o-right[] Create the `ClubsApi` interface, annotating its method with 
+icon:hand-o-right[] Create the `ClubsApi` interface, annotating its methods with 
 `io.micronaut.http.annotation.Get` as described in the diagram.
 
 icon:hand-o-right[] Then, create `ClubsClient` by simply extending from `ClubsApi`.
@@ -368,8 +368,8 @@ Annotate the interface with `io.micronaut.http.client.Client("/")`.
 
 icon:hand-o-right[] Finally, implement the controller `ClubController`. Annotate
 the class with `io.micronaut.http.annotation.Controller("/")`, matching the path
-specified on `ClubsClient`. Use `ClubService` by declaring a constructor dependency
-on it.
+specified on `ClubsClient`. Use `ClubService` to implement the actions by declaring 
+a constructor dependency on it.
 
 WARNING: The controller actions need to be annotated with `io.micronaut.http.annotation.Get` again.
 
@@ -421,3 +421,46 @@ icon:hand-o-right[] Now, run the application:
 You should see an output similar to:
 
     03:05:56.704 [main] DEBUG clubs.init.DataLoader - Loading sample data
+
+=== Register the service in Consul (X minutes)
+
+We want the `clubs` microservice to be discoverable by the `fixtures` service.
+So we will enable Micronaut's Consul support for service discovery.
+
+icon:hand-o-right[] First, add the neccessary dependency in `build.gradle`:
+
+[source,groovy]
+----
+include::./ex02/solution/clubs/build.gradle[tag=dep,indent=0]
+----
+
+icon:hand-o-right[] Then, change `src/main/resources/application.yml` to define
+the Consul configuration:
+
+[source,yaml]
+----
+include::./ex02/solution/clubs/src/main/resources/application.yml[tag=consul]
+----
+
+icon:hand-o-right[] Finally, run a Consul instance with Docker:
+
+    $ docker run -d --name=dev-consul -e CONSUL_BIND_INTERFACE=eth0 -e CONSUL_UI_BETA=true -p 8500:8500 consul
+
+icon:hand-o-right[] Now, if you run the application, you will see it registers
+with Consul at startup:
+
+----
+$ ./gradlew run
+...
+04:20:09.501 [nioEventLoopGroup-1-3] INFO  i.m.d.registration.AutoRegistration - Registered service [clubs] with Consul
+...
+----
+
+icon:hand-o-right[] If you go the http://localhost:8500/[Consul UI], you can see
+it shows as registered:
+
+image::consul.png[]
+
+icon:hand-o-right[] You can run yet another instance of `clubs` on a different
+shell, and see it registered. We will use them both with Micronaut's load-balanced
+HTTP client in the next exercise.

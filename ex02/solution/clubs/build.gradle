@@ -40,6 +40,11 @@ dependencies {
     compile "io.micronaut.configuration:hibernate-gorm"
     compile "io.micronaut:http-server-netty"
     compile "io.micronaut:runtime-groovy"
+
+//tag::dep[]
+    compile "io.micronaut:discovery-client"
+//end::dep[]
+
     compileOnly "io.micronaut:inject-java"
     compileOnly "io.micronaut:inject-groovy"
     runtime "ch.qos.logback:logback-classic:1.2.3"
