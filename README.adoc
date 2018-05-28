@@ -336,7 +336,8 @@ icon:hand-o-right[] Now, let's test our service:
 ----
 include::./ex02/solution/clubs/src/test/groovy/clubs/ClubServiceSpec.groovy[tag=spec]
 ----
-<1> Instead of any kind of injection, we simply get the bean from the application context.
+<1> `grails.gorm.transactions.Rollback` applies a transaction that always rolls back.
+<2> Instead of any kind of injection, we simply get the bean from the application context.
 
 === REST API (X minutes)
 
@@ -352,8 +353,71 @@ ClubsClient <<interface>>
 ClubsApi <|-- ClubsClient
 ClubsApi <|-- ClubController
 
-ClubsApi : List<Club> listClubs()
+ClubsApi : @Get("/") List<Club> listClubs()
+ClubsApi : @Get("/{id}") List<Club> Club show(Long id)
 ....
 endif::[]
 
 image::clubs-diagram.png[]
+
+icon:hand-o-right[] Create the `ClubsApi` interface, annotating its method with 
+`io.micronaut.http.annotation.Get` as described in the diagram.
+
+icon:hand-o-right[] Then, create `ClubsClient` by simply extending from `ClubsApi`.
+Annotate the interface with `io.micronaut.http.client.Client("/")`.
+
+icon:hand-o-right[] Finally, implement the controller `ClubController`. Annotate
+the class with `io.micronaut.http.annotation.Controller("/")`, matching the path
+specified on `ClubsClient`. Use `ClubService` by declaring a constructor dependency
+on it.
+
+WARNING: The controller actions need to be annotated with `io.micronaut.http.annotation.Get` again.
+
+icon:hand-o-right[] Finally, configure `logback.xml` to see some relevant output
+
+[source,xml]
+----
+include::./ex02/solution/clubs/src/main/resources/logback.xml[tag=!default]
+----
+<1> Debug level for our code
+<2> This allows to see the HTTP request and responses from the HTTP clients.
+
+icon:hand-o-right[] Once you have it, write a test for everything:
+
+[source,groovy]
+----
+include::./ex02/solution/clubs/src/test/groovy/clubs/ClubControllerSpec.groovy[tag=spec]
+----
+<1> Wrap write operations with `grails.gorm.transactions.Transactional`
+
+=== Load some data for production (X minutes)
+
+During our tests, we have been seeding test data on demand, as it is a good
+practise to isolate test data from test to test. However, for production, we 
+want some data loaded
+
+icon:hand-o-right[] Let's create a bean to load some data. Run:
+
+    mn create-bean dataLoader
+
+icon:hand-o-right[] Change it to look like:
+
+[source,groovy]
+----
+include::./ex02/solution/clubs/src/main/groovy/clubs/init/DataLoader.groovy[tag=class]
+----
+<1> `javax.inject.Singleton` will tell Micronaut to manage a single instance in 
+    the application context.
+<2> With `io.micronaut.context.annotation.Requires`, we ensure this runs on production, 
+    which can be specified as not running under tests.
+<3> Make the bean a `io.micronaut.context.event.ApplicationEventListener` of an
+    `io.micronaut.runtime.server.event.ServerStartupEvent` event.
+<4> Implement the method loading some sample data.
+
+icon:hand-o-right[] Now, run the application:
+
+    ./gradlew run
+
+You should see an output similar to:
+
+    03:05:56.704 [main] DEBUG clubs.init.DataLoader - Loading sample data

@@ -1,0 +1,6 @@
+
+profile: service
+defaultPackage: clubs
+---
+testFramework: spock
+sourceLanguage: groovy

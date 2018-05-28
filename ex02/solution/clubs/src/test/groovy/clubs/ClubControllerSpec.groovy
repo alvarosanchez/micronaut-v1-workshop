@@ -10,19 +10,20 @@ import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification
 
+//tag::spec[]
 class ClubControllerSpec extends Specification {
 
     @Shared @AutoCleanup EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer)
     @Shared ClubsClient client = embeddedServer.applicationContext.getBean(ClubsClient)
     @Shared ClubService service = embeddedServer.applicationContext.getBean(ClubService)
 
-    @Transactional
+    @Transactional // <1>
     void setup() {
         service.save("Real Madrid CF", "Santiago Bernabeu")
         service.save("FC Barcelona", "Camp Nou")
     }
 
-    @Transactional
+    @Transactional // <1>
     void cleanupSpec() {
         Club.list()*.delete()
     }
@@ -44,3 +45,4 @@ class ClubControllerSpec extends Specification {
         club.stadium == 'Santiago Bernabeu'
     }
 }
+//end::spec[]
