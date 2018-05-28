@@ -34,4 +34,13 @@ class ClubControllerSpec extends Specification {
         then:
         response.size() == 2
     }
+
+    void "test find one"() {
+        when:
+        Club club = client.show(1)
+
+        then:
+        club.name == 'Real Madrid CF'
+        club.stadium == 'Santiago Bernabeu'
+    }
 }

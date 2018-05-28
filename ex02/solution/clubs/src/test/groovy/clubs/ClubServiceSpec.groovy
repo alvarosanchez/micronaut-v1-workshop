@@ -9,18 +9,18 @@ import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification
 
+@Rollback
 class ClubServiceSpec extends Specification {
 
     @Shared @AutoCleanup EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer)
     @Shared ClubService service = embeddedServer.applicationContext.getBean(ClubService)
 
-    @Rollback
     void "it can work with clubs"() {
         expect:
         service.count() == 0
 
         when:
-        service.save("Real Madrid", "Bernabeu")
+        service.save("Real Madrid CF", "Bernabeu")
 
         then:
         service.count() == 1
@@ -30,5 +30,17 @@ class ClubServiceSpec extends Specification {
 
         then:
         clubs.size() == 1
+    }
+
+    void "it can show a club"() {
+        given:
+        Club club = service.save("CD Leganes", "Butarque")
+
+        when:
+        service.find(club.id)
+
+        then:
+        club.name == "CD Leganes"
+        club.stadium == "Butarque"
     }
 }

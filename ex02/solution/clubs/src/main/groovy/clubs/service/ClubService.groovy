@@ -4,6 +4,7 @@ import clubs.domain.Club
 import grails.gorm.services.Service
 
 import javax.validation.constraints.NotBlank
+import javax.validation.constraints.NotNull
 
 @Service(Club)
 interface ClubService {
@@ -14,4 +15,5 @@ interface ClubService {
 
     List<Club> findAll()
 
+    Club find(@NotNull Long id)
 }

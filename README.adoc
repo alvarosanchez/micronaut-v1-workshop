@@ -22,7 +22,9 @@ In order to do this workshop, you need the following:
     - `unzip`.
     - `git`.
 * JDK 8.
-* Docker.
+* Docker. Please pull the following images before attending the workshop:
+    - `consul`.
+    - `mongo`.
 
 === Micronaut CLI
 
@@ -132,7 +134,7 @@ from a profile typically are specific to the profile application type; for examp
 the `service` profile (designed for creation of microservice applications) provides 
 the `create-controller` and `create-client` commands.
 
-=== Listing profiles
+=== Listing profiles (X minutes)
 
 icon:hand-o-right[] You can list the available profiles with the `list-profiles` command:
 
@@ -152,7 +154,7 @@ Applications generated from a profile can be personalised with **features**. A
 feature further customises the newly created project by adding additional 
 dependencies to the build, more files to the project skeleton, etc.
 
-=== Getting information about a profile
+=== Getting information about a profile (X minutes)
 
 icon:hand-o-right[] To see all the features of a profile, you can
 use the `profile-info` command:
@@ -200,7 +202,7 @@ Provided Features:
 * tracing-zipkin - Adds support for distributed tracing with Zipkin (https://zipkin.io)
 ----
 
-=== Creating and running a _hello galaxy_
+=== Creating and running a _hello galaxy_ (X minutes)
 
 As explained avobe, the `create-app` command can be used to create new projects.
 It accepts some flags:
@@ -278,7 +280,7 @@ $ curl 0:8080/hello
 Hello Galaxy!
 ----
 
-=== Write an automated test
+=== Write an automated test (X minutes)
 
 While testing manually is acceptable in some situations, going forward it is 
 better to have automated tests to exercise our applications. Fortunately,
@@ -323,6 +325,8 @@ TIP: Change to the `ex02/clubs` directory to work on this exercise. The project
 has been already created for you, no need to run `mn create-app` this time.
 
 In this exercise we are creating the `clubs` microservice.
+
+=== GORM layer (X minutes)
 
 icon:hand-o-right[] Let's define first a `Club` domain class under
 `src/main/groovy/clubs/domain/Club.groovy` with 2 string attributes:
@@ -369,3 +373,18 @@ class ClubServiceSpec extends Specification {
 }
 ----
 <1> Instead of any kind of injection, we simply get the bean from the application context.
+
+=== REST API (X minutes)
+
+Micronaut helps you writing both the client and server sides of a REST API. In this service,
+we are going to create the following:
+
+ifdef::generate-diagrams[]
+[plantuml, football-diagram, png]
+....
+ClubsApi <<interface>> <|-- ClubsClient <<interface>>
+ClubsApi <|-- ClubController
+....
+endif::[]
+
+image::football-diagram.png[]

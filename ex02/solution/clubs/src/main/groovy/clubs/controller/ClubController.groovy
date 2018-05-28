@@ -22,4 +22,10 @@ class ClubController implements ClubsApi {
     List<Club> listClubs() {
         return clubService.findAll()
     }
+
+    @Override
+    @Get("/{id}")
+    Club show(Long id) {
+        return clubService.find(id)
+    }
 }
