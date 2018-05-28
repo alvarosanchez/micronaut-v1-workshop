@@ -533,12 +533,20 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_write_an_automated_test_x_minutes">1.4. Write an automated test (X minutes)</a></li>
 </ul>
 </li>
-<li><a href="#_creating_the_clubs_microservice_30_minutes">2. Creating the Clubs microservice (30 minutes)</a>
+<li><a href="#_creating_the_clubs_microservice_45_minutes">2. Creating the Clubs microservice (45 minutes)</a>
 <ul class="sectlevel2">
 <li><a href="#_gorm_layer_x_minutes">2.1. GORM layer (X minutes)</a></li>
 <li><a href="#_rest_api_x_minutes">2.2. REST API (X minutes)</a></li>
 <li><a href="#_load_some_data_for_production_x_minutes">2.3. Load some data for production (X minutes)</a></li>
 <li><a href="#_register_the_service_in_consul_x_minutes">2.4. Register the service in Consul (X minutes)</a></li>
+</ul>
+</li>
+<li><a href="#_creating_the_fixtures_microservice_45_minutes">3. Creating the Fixtures microservice (45 minutes)</a>
+<ul class="sectlevel2">
+<li><a href="#_gorm_layer_x_minutes_2">3.1. GORM layer (X minutes)</a></li>
+<li><a href="#_rest_api_x_minutes_2">3.2. REST API (X minutes)</a></li>
+<li><a href="#_load_some_data_for_production_x_minutes_2">3.3. Load some data for production (X minutes)</a></li>
+<li><a href="#_see_it_in_action_x_minutes">3.4. See it in action (X minutes)</a></li>
 </ul>
 </li>
 </ul>
@@ -634,6 +642,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="olist arabic">
 <ol class="arabic">
 <li>
+<p>Clone <a href="https://github.com/micronaut-projects/micronaut-profiles/">this repo</a> on your computer, and run:</p>
+<div class="literalblock">
+<div class="content">
+<pre>./gradlew publishToMavenLocal</pre>
+</div>
+</div>
+</li>
+<li>
 <p>Grab the latest <code>-dist.zip</code> file from <a href="https://oss.sonatype.org/content/groups/public/io/micronaut/cli/1.0.0-SNAPSHOT/" class="bare">https://oss.sonatype.org/content/groups/public/io/micronaut/cli/1.0.0-SNAPSHOT/</a>:</p>
 <div class="literalblock">
 <div class="content">
@@ -662,7 +678,7 @@ Archive:  micronaut-cli.zip
 <p>Link the <code>mn</code> command-line into a directory belonging to your <code>$PATH</code> (eg: <code>/usr/local/bin</code>):</p>
 <div class="literalblock">
 <div class="content">
-<pre>$ ln -s /usr/local/micronaut/bin/mn /usr/local/bin/</pre>
+<pre>$ sudo ln -s /usr/local/micronaut/bin/mn /usr/local/bin/</pre>
 </div>
 </div>
 </li>
@@ -688,7 +704,7 @@ Archive:  micronaut-cli.zip
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>git clone https://github.com/alvarosanchez/ratpack-101.git</pre>
+<pre>git clone https://github.com/alvarosanchez/micronaut-workshop.git</pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -1045,7 +1061,7 @@ the response as a String.</td>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_creating_the_clubs_microservice_30_minutes">2. Creating the Clubs microservice (30 minutes)</h2>
+<h2 id="_creating_the_clubs_microservice_45_minutes">2. Creating the Clubs microservice (45 minutes)</h2>
 <div class="sectionbody">
 <div class="admonitionblock tip">
 <table>
@@ -1096,6 +1112,19 @@ named <code>ClubService</code> as an interface with the following operations:</p
 <span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Club</span><span class="tok-o">&gt;</span> <span class="tok-n">findAll</span><span class="tok-o">()</span>
 <span class="tok-n">Club</span> <span class="tok-nf">find</span><span class="tok-o">(</span><span class="tok-nd">@NotNull</span> <span class="tok-n">Long</span> <span class="tok-n">id</span><span class="tok-o">)</span></code></pre>
 </div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+GORM Data Services are annotated with <code>grails.gorm.services.Service</code>, taking
+as an argument the entity they operate with. In this case, it would be <code>@Service(Club)</code>.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p><span class="icon"><i class="fa fa-hand-o-right"></i></span> Now, let&#8217;s test our service:</p>
@@ -1416,10 +1445,82 @@ HTTP client in the next exercise.</p>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_creating_the_fixtures_microservice_45_minutes">3. Creating the Fixtures microservice (45 minutes)</h2>
+<div class="sectionbody">
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Change to the <code>ex03/fixtures</code> directory to work on this exercise.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In this exercise we are creating the <code>fixtures</code> microservice.</p>
+</div>
+<div class="sect2">
+<h3 id="_gorm_layer_x_minutes_2">3.1. GORM layer (X minutes)</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Run Mongo locally?</p>
+</li>
+<li>
+<p>Fixture domain class</p>
+</li>
+<li>
+<p>FixtureService GORM Data Service.</p>
+</li>
+<li>
+<p>Tests</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_rest_api_x_minutes_2">3.2. REST API (X minutes)</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>ClubsClient HTTP client.</p>
+</li>
+<li>
+<p>FixtureView DTO.</p>
+</li>
+<li>
+<p>FixtureController.</p>
+</li>
+<li>
+<p>Tests.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_load_some_data_for_production_x_minutes_2">3.3. Load some data for production (X minutes)</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>DataLoader</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_see_it_in_action_x_minutes">3.4. See it in action (X minutes)</h3>
+
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-05-28 04:27:11 CEST
+Last updated 2018-05-28 19:11:35 CEST
 </div>
 </div>
 </body>
