@@ -538,6 +538,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_gorm_layer_x_minutes">2.1. GORM layer (X minutes)</a></li>
 <li><a href="#_rest_api_x_minutes">2.2. REST API (X minutes)</a></li>
 <li><a href="#_load_some_data_for_production_x_minutes">2.3. Load some data for production (X minutes)</a></li>
+<li><a href="#_register_the_service_in_consul_x_minutes">2.4. Register the service in Consul (X minutes)</a></li>
 </ul>
 </li>
 </ul>
@@ -1163,7 +1164,7 @@ we are going to create the following:</p>
 </div>
 </div>
 <div class="paragraph">
-<p><span class="icon"><i class="fa fa-hand-o-right"></i></span> Create the <code>ClubsApi</code> interface, annotating its method with
+<p><span class="icon"><i class="fa fa-hand-o-right"></i></span> Create the <code>ClubsApi</code> interface, annotating its methods with
 <code>io.micronaut.http.annotation.Get</code> as described in the diagram.</p>
 </div>
 <div class="paragraph">
@@ -1173,8 +1174,8 @@ Annotate the interface with <code>io.micronaut.http.client.Client("/")</code>.</
 <div class="paragraph">
 <p><span class="icon"><i class="fa fa-hand-o-right"></i></span> Finally, implement the controller <code>ClubController</code>. Annotate
 the class with <code>io.micronaut.http.annotation.Controller("/")</code>, matching the path
-specified on <code>ClubsClient</code>. Use <code>ClubService</code> by declaring a constructor dependency
-on it.</p>
+specified on <code>ClubsClient</code>. Use <code>ClubService</code> to implement the actions by declaring
+a constructor dependency on it.</p>
 </div>
 <div class="admonitionblock warning">
 <table>
@@ -1350,12 +1351,75 @@ which can be specified as not running under tests.</td>
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_register_the_service_in_consul_x_minutes">2.4. Register the service in Consul (X minutes)</h3>
+<div class="paragraph">
+<p>We want the <code>clubs</code> microservice to be discoverable by the <code>fixtures</code> service.
+So we will enable Micronaut&#8217;s Consul support for service discovery.</p>
+</div>
+<div class="paragraph">
+<p><span class="icon"><i class="fa fa-hand-o-right"></i></span> First, add the neccessary dependency in <code>build.gradle</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span></span><span class="tok-n">compile</span> <span class="tok-s2">&quot;io.micronaut:discovery-client&quot;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><span class="icon"><i class="fa fa-hand-o-right"></i></span> Then, change <code>src/main/resources/application.yml</code> to define
+the Consul configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="yaml"><span></span><span class="tok-nn">---</span>
+<span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">consul</span><span class="tok-p tok-p-Indicator">:</span>
+  <span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">client</span><span class="tok-p tok-p-Indicator">:</span>
+    <span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">registration</span><span class="tok-p tok-p-Indicator">:</span>
+      <span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">enabled</span><span class="tok-p tok-p-Indicator">:</span> <span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">true</span>
+  <span class="tok-l tok-l-Scalar tok-l-Scalar-Plain">defaultZone</span><span class="tok-p tok-p-Indicator">:</span> <span class="tok-s">&quot;${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}&quot;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><span class="icon"><i class="fa fa-hand-o-right"></i></span> Finally, run a Consul instance with Docker:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ docker run -d --name=dev-consul -e CONSUL_BIND_INTERFACE=eth0 -e CONSUL_UI_BETA=true -p 8500:8500 consul</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><span class="icon"><i class="fa fa-hand-o-right"></i></span> Now, if you run the application, you will see it registers
+with Consul at startup:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ ./gradlew run
+...
+04:20:09.501 [nioEventLoopGroup-1-3] INFO  i.m.d.registration.AutoRegistration - Registered service [clubs] with Consul
+...</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><span class="icon"><i class="fa fa-hand-o-right"></i></span> If you go the <a href="http://localhost:8500/">Consul UI</a>, you can see
+it shows as registered:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/consul.png" alt="consul">
+</div>
+</div>
+<div class="paragraph">
+<p><span class="icon"><i class="fa fa-hand-o-right"></i></span> You can run yet another instance of <code>clubs</code> on a different
+shell, and see it registered. We will use them both with Micronaut&#8217;s load-balanced
+HTTP client in the next exercise.</p>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-05-28 03:39:41 CEST
+Last updated 2018-05-28 04:27:11 CEST
 </div>
 </div>
 </body>
