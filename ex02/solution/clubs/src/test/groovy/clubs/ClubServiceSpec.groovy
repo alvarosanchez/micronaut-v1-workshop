@@ -9,11 +9,12 @@ import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification
 
+//tag::spec[]
 @Rollback
 class ClubServiceSpec extends Specification {
 
     @Shared @AutoCleanup EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer)
-    @Shared ClubService service = embeddedServer.applicationContext.getBean(ClubService)
+    @Shared ClubService service = embeddedServer.applicationContext.getBean(ClubService) // <1>
 
     void "it can work with clubs"() {
         expect:
@@ -44,3 +45,4 @@ class ClubServiceSpec extends Specification {
         club.stadium == "Butarque"
     }
 }
+//end::spec[]

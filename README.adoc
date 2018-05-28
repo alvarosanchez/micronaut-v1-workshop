@@ -254,10 +254,7 @@ IDE and make it return "Hello Micronauts!":
 
 [source,groovy]
 ----
-@Get("/")
-String index() {
-    return "Hello Galaxy!"
-}
+include::./ex01/solution/hello-galaxy/src/main/groovy/hello/galaxy/HelloController.groovy[tag=action,indent=0]
 ----
 
 icon:hand-o-right[] Now, run the application:
@@ -291,19 +288,7 @@ to look like this:
 
 [source,groovy]
 ----
-class HelloControllerSpec extends Specification {
-
-    @Shared @AutoCleanup EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer) // <1>
-    @Shared @AutoCleanup RxHttpClient client = embeddedServer.applicationContext.createBean(RxHttpClient, embeddedServer.getURL()) //<2>
-
-    void "test index"() {
-        given:
-        String response = client.toBlocking().retrieve("/hello") //<3>
-
-        expect:
-        response == "Hello Galaxy!"
-    }
-}
+include::./ex01/solution/hello-galaxy/src/test/groovy/hello/galaxy/HelloControllerSpec.groovy[tag=spec]
 ----
 <1> Running an embedded server
 <2> Obtaining a reactive HTTP client attached to our embedded server
@@ -340,37 +325,16 @@ icon:hand-o-right[] Next, define a
 http://gorm.grails.org/latest/hibernate/manual/index.html#dataServices[GORM data service]
 named `ClubService` as an interface with the following operations:
 
-* `int count()`
-* `Club save(@NotBlank String name, @NotBlank String stadium)`
-* `List<Club> findAll()`
+[source,groovy]
+----
+include::./ex02/solution/clubs/src/main/groovy/clubs/service/ClubService.groovy[tag=operations,indent=0]
+----
 
 icon:hand-o-right[] Now, let's test our service:
 
 [source,groovy]
 ----
-class ClubServiceSpec extends Specification {
-
-    @Shared @AutoCleanup EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer)
-    @Shared ClubService service = embeddedServer.applicationContext.getBean(ClubService) // <1>
-
-    @Rollback
-    void "it can work with clubs"() {
-        expect:
-        service.count() == 0
-
-        when:
-        service.save("Real Madrid", "Bernabeu")
-
-        then:
-        service.count() == 1
-
-        when:
-        List<Club> clubs = service.findAll()
-
-        then:
-        clubs.size() == 1
-    }
-}
+include::./ex02/solution/clubs/src/test/groovy/clubs/ClubServiceSpec.groovy[tag=spec]
 ----
 <1> Instead of any kind of injection, we simply get the bean from the application context.
 
@@ -380,11 +344,16 @@ Micronaut helps you writing both the client and server sides of a REST API. In t
 we are going to create the following:
 
 ifdef::generate-diagrams[]
-[plantuml, football-diagram, png]
+[plantuml, clubs-diagram, png]
 ....
-ClubsApi <<interface>> <|-- ClubsClient <<interface>>
+ClubsApi <<interface>>
+ClubsClient <<interface>>
+
+ClubsApi <|-- ClubsClient
 ClubsApi <|-- ClubController
+
+ClubsApi : List<Club> listClubs()
 ....
 endif::[]
 
-image::football-diagram.png[]
+image::clubs-diagram.png[]
