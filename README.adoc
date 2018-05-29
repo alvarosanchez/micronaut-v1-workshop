@@ -484,6 +484,11 @@ icon:hand-o-right[] First of all, run MongoDB with Docker:
 
     $ docker run -d --name=dev-mongo -p 27017:27017 mongo
 
+We also need the `clubs` microservice running and registered in Consul. You can
+run it directly from the `ex02/solution/clubs` folder:
+
+    [ex02/solution/clubs] $ ./gradlew run
+
 icon:hand-o-right[] Then, create the `Fixture` domain class with the following properties:
 
 [source,groovy]
