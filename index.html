@@ -1465,40 +1465,171 @@ Change to the <code>ex03/fixtures</code> directory to work on this exercise.
 </div>
 <div class="sect2">
 <h3 id="_gorm_layer_x_minutes_2">3.1. GORM layer (X minutes)</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Run Mongo locally?</p>
-</li>
-<li>
-<p>Fixture domain class</p>
-</li>
-<li>
-<p>FixtureService GORM Data Service.</p>
-</li>
-<li>
-<p>Tests</p>
-</li>
-</ul>
+<div class="paragraph">
+<p><span class="icon"><i class="fa fa-hand-o-right"></i></span> First of all, run MongoDB with Docker:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ docker run -d --name=dev-mongo -p 27017:27017 mongo</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><span class="icon"><i class="fa fa-hand-o-right"></i></span> Then, create the <code>Fixture</code> domain class with the following properties:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span></span><span class="tok-c1">//    ObjectId id</span>
+    <span class="tok-n">Long</span> <span class="tok-n">homeClubId</span>
+    <span class="tok-n">Long</span> <span class="tok-n">awayClubId</span>
+
+    <span class="tok-n">Short</span> <span class="tok-n">homeScore</span>
+    <span class="tok-n">Short</span> <span class="tok-n">awayScore</span>
+
+    <span class="tok-n">ZonedDateTime</span> <span class="tok-n">date</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As you can see, we are only storing club&#8217;s ids. When rendering fixture details,
+we will use Micronaut&#8217;s HTTP client to fetch details from the <code>clubs</code> microservice.</p>
+</div>
+<div class="paragraph">
+<p><span class="icon"><i class="fa fa-hand-o-right"></i></span> The next thing we need is an HTTP client for the <code>clubs</code> microservice. Create one with:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ mn create-client clubs</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Map the <code>GET /{clubId}</code> endpoint:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span></span><span class="tok-nd">@Client</span><span class="tok-o">(</span><span class="tok-s2">&quot;clubs&quot;</span><span class="tok-o">)</span>
+<span class="tok-kd">interface</span> <span class="tok-nc">ClubsClient</span> <span class="tok-o">{</span>
+
+    <span class="tok-nd">@Get</span><span class="tok-o">(</span><span class="tok-s2">&quot;/{id}&quot;</span><span class="tok-o">)</span>
+    <span class="tok-n">Maybe</span><span class="tok-o">&lt;</span><span class="tok-n">Club</span><span class="tok-o">&gt;</span> <span class="tok-n">findTeam</span><span class="tok-o">(</span><span class="tok-n">Long</span> <span class="tok-n">id</span><span class="tok-o">)</span>
+
+<span class="tok-o">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We are using a reactive type in the HTTP client response, so that is a hint
+for Micronaut to make it non-blocking.</p>
+</div>
+<div class="paragraph">
+<p><span class="icon"><i class="fa fa-hand-o-right"></i></span> We also need a <code>Club</code> POGO, with 2 string fields: <code>name</code> and <code>stadium</code>.</p>
+</div>
+<div class="paragraph">
+<p><span class="icon"><i class="fa fa-hand-o-right"></i></span> Now let&#8217;s create a GORM Data Service for <code>Fixture</code> (named
+<code>FixtureService</code>). In this case, instead of an interface, we are using an abstract
+class, as we are going to implement our own custom method.</p>
+</div>
+<div class="paragraph">
+<p>First, define the operations that we want GORM to implement automatically:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span></span>    <span class="tok-c1">//GORM operations</span>
+    <span class="tok-kd">abstract</span> <span class="tok-n">Fixture</span> <span class="tok-nf">save</span><span class="tok-o">(</span><span class="tok-nd">@Valid</span> <span class="tok-n">Fixture</span> <span class="tok-n">fixture</span><span class="tok-o">)</span>
+<span class="tok-c1">//    abstract Flowable&lt;Fixture&gt; findAll()</span>
+    <span class="tok-kd">abstract</span> <span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">Fixture</span><span class="tok-o">&gt;</span> <span class="tok-n">findAll</span><span class="tok-o">()</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As you can see, we are again using reactive types in the return values, and GORM will
+figure out and implement it for us.</p>
+</div>
+<div class="paragraph">
+<p>In this service, we need to transform <code>Fixture</code> instances into a data transfer
+object that contains club names and the stadium of the game.</p>
+</div>
+<div class="paragraph">
+<p><span class="icon"><i class="fa fa-hand-o-right"></i></span> Let&#8217;s call this DTO <code>FixtureView</code> and add the following fields:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span></span><span class="tok-n">String</span> <span class="tok-n">homeClubName</span>
+<span class="tok-n">String</span> <span class="tok-n">awayClubName</span>
+
+<span class="tok-n">String</span> <span class="tok-n">stadium</span>
+
+<span class="tok-n">Short</span> <span class="tok-n">homeScore</span>
+<span class="tok-n">Short</span> <span class="tok-n">awayScore</span>
+
+<span class="tok-n">ZonedDateTime</span> <span class="tok-n">date</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then, in <code>FixtureService</code> we need to implement a method that takes a <code>Fixture</code>
+instance and converts it to a <code>FixtureView</code> instance. You first need to inject
+the <code>ClubsClient</code> we defined before:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span></span><span class="tok-nd">@Inject</span>
+<span class="tok-n">ClubsClient</span> <span class="tok-n">clubsClient</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then, implement the method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span></span><span class="tok-n">Maybe</span><span class="tok-o">&lt;</span><span class="tok-n">FixtureView</span><span class="tok-o">&gt;</span> <span class="tok-n">toView</span><span class="tok-o">(</span><span class="tok-n">Fixture</span> <span class="tok-n">fixture</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+    <span class="tok-n">Maybe</span><span class="tok-o">.</span><span class="tok-na">zip</span><span class="tok-o">(</span><span class="tok-n">clubsClient</span><span class="tok-o">.</span><span class="tok-na">findTeam</span><span class="tok-o">(</span><span class="tok-n">fixture</span><span class="tok-o">.</span><span class="tok-na">homeClubId</span><span class="tok-o">),</span> <span class="tok-n">clubsClient</span><span class="tok-o">.</span><span class="tok-na">findTeam</span><span class="tok-o">(</span><span class="tok-n">fixture</span><span class="tok-o">.</span><span class="tok-na">awayClubId</span><span class="tok-o">))</span> <span class="tok-o">{</span> <span class="tok-n">Club</span> <span class="tok-n">homeClub</span><span class="tok-o">,</span> <span class="tok-n">Club</span> <span class="tok-n">awayClub</span> <span class="tok-o">-&gt;</span>
+        <span class="tok-k">return</span> <span class="tok-k">new</span> <span class="tok-nf">FixtureView</span><span class="tok-o">(</span>
+                <span class="tok-nl">date:</span> <span class="tok-n">fixture</span><span class="tok-o">.</span><span class="tok-na">date</span><span class="tok-o">,</span>
+                <span class="tok-nl">homeClubName:</span> <span class="tok-n">homeClub</span><span class="tok-o">.</span><span class="tok-na">name</span><span class="tok-o">,</span>
+                <span class="tok-nl">awayClubName:</span> <span class="tok-n">awayClub</span><span class="tok-o">.</span><span class="tok-na">name</span><span class="tok-o">,</span>
+                <span class="tok-nl">stadium:</span> <span class="tok-n">homeClub</span><span class="tok-o">.</span><span class="tok-na">stadium</span><span class="tok-o">,</span>
+                <span class="tok-nl">homeScore:</span> <span class="tok-n">fixture</span><span class="tok-o">.</span><span class="tok-na">homeScore</span><span class="tok-o">,</span>
+                <span class="tok-nl">awayScore:</span> <span class="tok-n">fixture</span><span class="tok-o">.</span><span class="tok-na">awayScore</span>
+        <span class="tok-o">)</span>
+    <span class="tok-o">}</span> <span class="tok-k">as</span> <span class="tok-n">Maybe</span><span class="tok-o">&lt;</span><span class="tok-n">FixtureView</span><span class="tok-o">&gt;</span>
+<span class="tok-o">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As the HTTP client is non-blocking, we can retrieve details about both clubs in
+parallel, and then compose our response once we get both HTTP response.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_rest_api_x_minutes_2">3.2. REST API (X minutes)</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>ClubsClient HTTP client.</p>
-</li>
-<li>
-<p>FixtureView DTO.</p>
-</li>
-<li>
-<p>FixtureController.</p>
-</li>
-<li>
-<p>Tests.</p>
-</li>
-</ul>
+<div class="paragraph">
+<p><span class="icon"><i class="fa fa-hand-o-right"></i></span> Let&#8217;s create a controller for displaying fixtures:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ mn create-controller fixture</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Declare a constructor dependency on <code>FixtureService</code> so that Micronaut knows it
+needs to be injected:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span></span><span class="tok-n">FixtureService</span> <span class="tok-n">fixtureService</span>
+
+<span class="tok-nf">FixtureController</span><span class="tok-o">(</span><span class="tok-n">FixtureService</span> <span class="tok-n">fixtureService</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+    <span class="tok-k">this</span><span class="tok-o">.</span><span class="tok-na">fixtureService</span> <span class="tok-o">=</span> <span class="tok-n">fixtureService</span>
+<span class="tok-o">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then, implement the action:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span></span><span class="tok-n">FixtureService</span> <span class="tok-n">fixtureService</span>
+
+<span class="tok-nf">FixtureController</span><span class="tok-o">(</span><span class="tok-n">FixtureService</span> <span class="tok-n">fixtureService</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+    <span class="tok-k">this</span><span class="tok-o">.</span><span class="tok-na">fixtureService</span> <span class="tok-o">=</span> <span class="tok-n">fixtureService</span>
+<span class="tok-o">}</span></code></pre>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -1520,7 +1651,7 @@ Change to the <code>ex03/fixtures</code> directory to work on this exercise.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-05-28 19:11:35 CEST
+Last updated 2018-05-29 18:26:20 CEST
 </div>
 </div>
 </body>
