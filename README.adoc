@@ -361,7 +361,7 @@ ClubsApi <|-- ClubsClient
 ClubsApi <|-- ClubController
 
 ClubsApi : @Get("/") List<Club> listClubs()
-ClubsApi : @Get("/{id}") List<Club> Club show(Long id)
+ClubsApi : @Get("/{id}") Club show(Long id)
 ....
 endif::[]
 
@@ -480,17 +480,99 @@ In this exercise we are creating the `fixtures` microservice.
 
 === GORM layer (X minutes)
 
-* Run Mongo locally?
-* Fixture domain class
-* FixtureService GORM Data Service.
-* Tests
+icon:hand-o-right[] First of all, run MongoDB with Docker:
+
+    $ docker run -d --name=dev-mongo -p 27017:27017 mongo
+
+icon:hand-o-right[] Then, create the `Fixture` domain class with the following properties:
+
+[source,groovy]
+----
+include::./ex03/solution/fixtures/src/main/groovy/fixtures/domain/Fixture.groovy[tag=fields,indent=0]
+----
+
+As you can see, we are only storing club's ids. When rendering fixture details,
+we will use Micronaut's HTTP client to fetch details from the `clubs` microservice.
+
+icon:hand-o-right[] The next thing we need is an HTTP client for the `clubs` microservice. Create one with:
+
+    $ mn create-client clubs
+
+Map the `GET /{clubId}` endpoint:
+
+[source,groovy]
+----
+include::./ex03/solution/fixtures/src/main/groovy/fixtures/clubs/ClubsClient.groovy[tag=class]
+----
+
+We are using a reactive type in the HTTP client response, so that is a hint
+for Micronaut to make it non-blocking.
+
+icon:hand-o-right[] We also need a `Club` POGO, with 2 string fields: `name` and `stadium`.
+
+icon:hand-o-right[] Now let's create a GORM Data Service for `Fixture` (named 
+`FixtureService`). In this case, instead of an interface, we are using an abstract
+class, as we are going to implement our own custom method.
+
+First, define the operations that we want GORM to implement automatically:
+
+[source,groovy]
+----
+include::./ex03/solution/fixtures/src/main/groovy/fixtures/service/FixtureService.groovy[tag=gorm-operations,indent=0]
+----
+
+As you can see, we are again using reactive types in the return values, and GORM will
+figure out and implement it for us.
+
+In this service, we need to transform `Fixture` instances into a data transfer 
+object that contains club names and the stadium of the game. 
+
+icon:hand-o-right[] Let's call this DTO `FixtureView` and add the following fields:
+
+[source,groovy]
+----
+include::./ex03/solution/fixtures/src/main/groovy/fixtures/view/FixtureView.groovy[tag=fields,indent=0]
+----
+
+Then, in `FixtureService` we need to implement a method that takes a `Fixture` 
+instance and converts it to a `FixtureView` instance. You first need to inject
+the `ClubsClient` we defined before:
+
+[source,groovy]
+----
+include::./ex03/solution/fixtures/src/main/groovy/fixtures/service/FixtureService.groovy[tag=client,indent=0]
+----
+
+Then, implement the method:
+
+[source,groovy]
+----
+include::./ex03/solution/fixtures/src/main/groovy/fixtures/service/FixtureService.groovy[tag=to-view,indent=0]
+----
+
+As the HTTP client is non-blocking, we can retrieve details about both clubs in 
+parallel, and then compose our response once we get both HTTP response.
 
 === REST API (X minutes)
 
-* ClubsClient HTTP client.
-* FixtureView DTO.
-* FixtureController.
-* Tests.
+icon:hand-o-right[] Let's create a controller for displaying fixtures:
+
+    $ mn create-controller fixture
+
+Declare a constructor dependency on `FixtureService` so that Micronaut knows it 
+needs to be injected:
+
+[source,groovy]
+----
+include::./ex03/solution/fixtures/src/main/groovy/fixtures/controller/FixtureController.groovy[tag=service,indent=0]
+----
+
+Then, implement the action:
+
+[source,groovy]
+----
+include::./ex03/solution/fixtures/src/main/groovy/fixtures/controller/FixtureController.groovy[tag=service,indent=0]
+----
 
 === Load some data for production (X minutes)
 
