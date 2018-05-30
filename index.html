@@ -543,7 +543,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_creating_the_fixtures_microservice_45_minutes">3. Creating the Fixtures microservice (45 minutes)</a>
 <ul class="sectlevel2">
-<li><a href="#_gorm_layer_25_minutes">3.1. GORM layer (25 minutes)</a></li>
+<li><a href="#_data_layer_25_minutes">3.1. Data layer (25 minutes)</a></li>
 <li><a href="#_rest_api_20_minutes_2">3.2. REST API (20 minutes)</a></li>
 </ul>
 </li>
@@ -1463,7 +1463,7 @@ Change to the <code>ex03/fixtures</code> directory to work on this exercise.
 <p>In this exercise we are creating the <code>fixtures</code> microservice.</p>
 </div>
 <div class="sect2">
-<h3 id="_gorm_layer_25_minutes">3.1. GORM layer (25 minutes)</h3>
+<h3 id="_data_layer_25_minutes">3.1. Data layer (25 minutes)</h3>
 <div class="paragraph">
 <p><span class="icon"><i class="fa fa-hand-o-right"></i></span> First of all, run MongoDB with Docker:</p>
 </div>
@@ -1471,29 +1471,6 @@ Change to the <code>ex03/fixtures</code> directory to work on this exercise.
 <div class="content">
 <pre>$ docker run -d --name=dev-mongo -p 27017:27017 mongo</pre>
 </div>
-</div>
-<div class="paragraph">
-<p>We also need the <code>clubs</code> microservice running and registered in Consul. You can
-run it directly from the <code>ex02/solution/clubs</code> folder:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>[ex02/solution/clubs] $ ./gradlew run</pre>
-</div>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-Mocking services is technically possible with Micronaut, however, it would
-complicate unnecessarily the tests setup, so for the sake of simplicity, we are
-using a real instance of the <code>clubs</code> service.
-</td>
-</tr>
-</table>
 </div>
 <div class="paragraph">
 <p><span class="icon"><i class="fa fa-hand-o-right"></i></span> Then, create the <code>Fixture</code> domain class with the following properties:</p>
@@ -1523,22 +1500,86 @@ we will use Micronaut&#8217;s HTTP client to fetch details from the <code>clubs<
 </div>
 </div>
 <div class="paragraph">
-<p>Map the <code>GET /{clubId}</code> endpoint:</p>
+<p>Before actually mapping any endpoint, we are going to create the following hierarchy:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/clients-diagram.png" alt="clients diagram">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>ClubsApi</code> is the interface that contains the client endpoint mappings.</p>
+</li>
+<li>
+<p><code>ClubsClient</code> is the production client, is annotated with <code>@Client</code> and simply
+extends from <code>ClubsApi</code>.</p>
+</li>
+<li>
+<p><code>ClubsClientMock</code> is a mocking client (resides in <code>src/test/groovy</code>), is annotated
+with <code>@Fallback</code>, and implements <code>ClubsApi</code> by returning hardcoded instances.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This is how <code>ClubsApi</code> looks like:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="groovy"><span></span><span class="tok-nd">@Client</span><span class="tok-o">(</span><span class="tok-s2">&quot;clubs&quot;</span><span class="tok-o">)</span>
-<span class="tok-kd">interface</span> <span class="tok-nc">ClubsClient</span> <span class="tok-o">{</span>
-
+<pre class="pygments highlight"><code data-lang="groovy"><span></span><span class="tok-kd">interface</span> <span class="tok-nc">ClubsApi</span> <span class="tok-o">{</span>
     <span class="tok-nd">@Get</span><span class="tok-o">(</span><span class="tok-s2">&quot;/{id}&quot;</span><span class="tok-o">)</span>
     <span class="tok-n">Maybe</span><span class="tok-o">&lt;</span><span class="tok-n">Club</span><span class="tok-o">&gt;</span> <span class="tok-n">findTeam</span><span class="tok-o">(</span><span class="tok-n">Long</span> <span class="tok-n">id</span><span class="tok-o">)</span>
-
-<span class="tok-o">}</span></code></pre>
+<span class="tok-o">}</span>
+<span class="tok-c1">//end::class[]</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>We are using a reactive type in the HTTP client response, so that is a hint
 for Micronaut to make it non-blocking.</p>
+</div>
+<div class="paragraph">
+<p>Then, the production client:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span></span><span class="tok-nd">@Client</span><span class="tok-o">(</span><span class="tok-s2">&quot;clubs&quot;</span><span class="tok-o">)</span>    <i class="conum" data-value="1"></i><b>(1)</b>
+<span class="tok-nd">@Recoverable</span>        <i class="conum" data-value="2"></i><b>(2)</b>
+<span class="tok-kd">interface</span> <span class="tok-nc">ClubsClient</span> <span class="tok-kd">extends</span> <span class="tok-n">ClubsApi</span> <span class="tok-o">{}</span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>"clubs"</code> is the Consul name for the Clubs microservice (which registers
+itself with the <code>micronaut.application.name</code> property).</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>@Recoverable</code> is an AOP advice that tells Micronaut to look for a <code>@Fallback</code>
+whenever an exception is produced by this bean.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Finally, the mocking client:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="groovy"><span></span><span class="tok-nd">@Fallback</span>
+<span class="tok-kd">class</span> <span class="tok-nc">ClubsClientMock</span> <span class="tok-kd">implements</span> <span class="tok-n">ClubsApi</span><span class="tok-o">{</span>
+
+    <span class="tok-nd">@Override</span>
+    <span class="tok-n">Maybe</span><span class="tok-o">&lt;</span><span class="tok-n">Club</span><span class="tok-o">&gt;</span> <span class="tok-n">findTeam</span><span class="tok-o">(</span><span class="tok-n">Long</span> <span class="tok-n">id</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+        <span class="tok-k">if</span> <span class="tok-o">(</span><span class="tok-n">id</span> <span class="tok-o">==</span> <span class="tok-mi">1</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+            <span class="tok-n">Maybe</span><span class="tok-o">.</span><span class="tok-na">just</span><span class="tok-o">(</span><span class="tok-k">new</span> <span class="tok-n">Club</span><span class="tok-o">(</span><span class="tok-nl">name:</span> <span class="tok-s2">&quot;CD Leganes&quot;</span><span class="tok-o">,</span> <span class="tok-nl">stadium:</span> <span class="tok-s2">&quot;Butarque&quot;</span><span class="tok-o">))</span>
+        <span class="tok-o">}</span> <span class="tok-k">else</span> <span class="tok-o">{</span>
+            <span class="tok-n">Maybe</span><span class="tok-o">.</span><span class="tok-na">just</span><span class="tok-o">(</span><span class="tok-k">new</span> <span class="tok-n">Club</span><span class="tok-o">(</span><span class="tok-nl">name:</span> <span class="tok-s2">&quot;Getafe CF&quot;</span><span class="tok-o">,</span> <span class="tok-nl">stadium:</span> <span class="tok-s2">&quot;Coliseum&quot;</span><span class="tok-o">))</span>
+        <span class="tok-o">}</span>
+    <span class="tok-o">}</span>
+<span class="tok-o">}</span></code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p><span class="icon"><i class="fa fa-hand-o-right"></i></span> We also need a <code>Club</code> POGO to capture the JSON response from <code>clubs</code>. Define
@@ -1646,11 +1687,11 @@ the other microservice.</p>
 
         <span class="tok-nl">then:</span>
         <span class="tok-n">view</span><span class="tok-o">.</span><span class="tok-na">date</span> <span class="tok-o">==</span> <span class="tok-n">now</span>
-        <span class="tok-n">view</span><span class="tok-o">.</span><span class="tok-na">homeClubName</span> <span class="tok-o">==</span> <span class="tok-s2">&quot;Real Madrid CF&quot;</span>
+        <span class="tok-n">view</span><span class="tok-o">.</span><span class="tok-na">homeClubName</span> <span class="tok-o">==</span> <span class="tok-s2">&quot;CD Leganes&quot;</span>
         <span class="tok-n">view</span><span class="tok-o">.</span><span class="tok-na">homeScore</span> <span class="tok-o">==</span> <span class="tok-mi">5</span>
-        <span class="tok-n">view</span><span class="tok-o">.</span><span class="tok-na">awayClubName</span> <span class="tok-o">==</span> <span class="tok-s2">&quot;FC Barcelona&quot;</span>
+        <span class="tok-n">view</span><span class="tok-o">.</span><span class="tok-na">awayClubName</span> <span class="tok-o">==</span> <span class="tok-s2">&quot;Getafe CF&quot;</span>
         <span class="tok-n">view</span><span class="tok-o">.</span><span class="tok-na">awayScore</span> <span class="tok-o">==</span> <span class="tok-mi">0</span>
-        <span class="tok-n">view</span><span class="tok-o">.</span><span class="tok-na">stadium</span> <span class="tok-o">==</span> <span class="tok-s2">&quot;Santiago Bernabeu&quot;</span>
+        <span class="tok-n">view</span><span class="tok-o">.</span><span class="tok-na">stadium</span> <span class="tok-o">==</span> <span class="tok-s2">&quot;Butarque&quot;</span>
 
         <span class="tok-nl">cleanup:</span>
         <span class="tok-n">fixture</span><span class="tok-o">.</span><span class="tok-na">delete</span><span class="tok-o">(</span><span class="tok-nl">flush:</span> <span class="tok-kc">true</span><span class="tok-o">)</span>
@@ -1738,8 +1779,8 @@ workshop, so for the sake of simplicity, we are introducing a blocking call.</p>
         <span class="tok-n">List</span><span class="tok-o">&lt;</span><span class="tok-n">FixtureView</span><span class="tok-o">&gt;</span> <span class="tok-n">views</span> <span class="tok-o">=</span> <span class="tok-n">client</span><span class="tok-o">.</span><span class="tok-na">findAll</span><span class="tok-o">()</span>
 
         <span class="tok-nl">then:</span>
-        <span class="tok-n">views</span><span class="tok-o">.</span><span class="tok-na">first</span><span class="tok-o">().</span><span class="tok-na">homeClubName</span> <span class="tok-o">==</span> <span class="tok-s2">&quot;Real Madrid CF&quot;</span>
-        <span class="tok-n">views</span><span class="tok-o">.</span><span class="tok-na">first</span><span class="tok-o">().</span><span class="tok-na">awayClubName</span> <span class="tok-o">==</span> <span class="tok-s2">&quot;FC Barcelona&quot;</span>
+        <span class="tok-n">views</span><span class="tok-o">.</span><span class="tok-na">first</span><span class="tok-o">().</span><span class="tok-na">homeClubName</span> <span class="tok-o">==</span> <span class="tok-s2">&quot;CD Leganes&quot;</span>
+        <span class="tok-n">views</span><span class="tok-o">.</span><span class="tok-na">first</span><span class="tok-o">().</span><span class="tok-na">awayClubName</span> <span class="tok-o">==</span> <span class="tok-s2">&quot;Getafe CF&quot;</span>
 
         <span class="tok-nl">cleanup:</span>
         <span class="tok-n">fixture</span><span class="tok-o">.</span><span class="tok-na">delete</span><span class="tok-o">(</span><span class="tok-nl">flush:</span> <span class="tok-kc">true</span><span class="tok-o">)</span>
@@ -1756,7 +1797,7 @@ workshop, so for the sake of simplicity, we are introducing a blocking call.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-05-30 03:43:32 CEST
+Last updated 2018-05-30 11:20:47 CEST
 </div>
 </div>
 </body>
