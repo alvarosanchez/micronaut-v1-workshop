@@ -1,15 +1,10 @@
 package fixtures.clubs
 
-import io.micronaut.http.annotation.Get
 import io.micronaut.http.client.Client
-import io.reactivex.Maybe
+import io.micronaut.retry.annotation.Recoverable
 
 //tag::class[]
-@Client("clubs")
-interface ClubsClient {
-
-    @Get("/{id}")
-    Maybe<Club> findTeam(Long id)
-
-}
+@Client("clubs")    // <1>
+@Recoverable        // <2>
+interface ClubsClient extends ClubsApi {}
 //end::class[]

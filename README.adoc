@@ -478,20 +478,11 @@ TIP: Change to the `ex03/fixtures` directory to work on this exercise.
 
 In this exercise we are creating the `fixtures` microservice.
 
-=== GORM layer (25 minutes)
+=== Data layer (25 minutes)
 
 icon:hand-o-right[] First of all, run MongoDB with Docker:
 
     $ docker run -d --name=dev-mongo -p 27017:27017 mongo
-
-We also need the `clubs` microservice running and registered in Consul. You can
-run it directly from the `ex02/solution/clubs` folder:
-
-    [ex02/solution/clubs] $ ./gradlew run
-
-TIP: Mocking services is technically possible with Micronaut, however, it would
-complicate unnecessarily the tests setup, so for the sake of simplicity, we are
-using a real instance of the `clubs` service.
 
 icon:hand-o-right[] Then, create the `Fixture` domain class with the following properties:
 
@@ -507,15 +498,57 @@ icon:hand-o-right[] The next thing we need is an HTTP client for the `clubs` mic
 
     $ mn create-client clubs
 
-Map the `GET /{clubId}` endpoint:
+Before actually mapping any endpoint, we are going to create the following hierarchy:
+
+ifdef::generate-diagrams[]
+[plantuml, clients-diagram, png]
+....
+ClubsApi <<interface>>
+ClubsClient <<interface>>
+ClubsClientMock
+
+ClubsApi <|-- ClubsClient
+ClubsApi <|-- ClubsClientMock
+
+ClubsApi : @Get("/{id}") Club show(Long id)
+....
+endif::[]
+
+image::clients-diagram.png[]
+
+* `ClubsApi` is the interface that contains the client endpoint mappings.
+* `ClubsClient` is the production client, is annotated with `@Client` and simply
+  extends from `ClubsApi`.
+* `ClubsClientMock` is a mocking client (resides in `src/test/groovy`), is annotated 
+  with `@Fallback`, and implements `ClubsApi` by returning hardcoded instances.
+
+This is how `ClubsApi` looks like:
+
+[source,groovy]
+----
+include::./ex03/solution/fixtures/src/main/groovy/fixtures/clubs/ClubsApi.groovy[tag=class]
+----
+
+We are using a reactive type in the HTTP client response, so that is a hint
+for Micronaut to make it non-blocking.
+
+Then, the production client:
 
 [source,groovy]
 ----
 include::./ex03/solution/fixtures/src/main/groovy/fixtures/clubs/ClubsClient.groovy[tag=class]
 ----
+<1> `"clubs"` is the Consul name for the Clubs microservice (which registers 
+    itself with the `micronaut.application.name` property).
+<2> `@Recoverable` is an AOP advice that tells Micronaut to look for a `@Fallback`
+    whenever an exception is produced by this bean.
 
-We are using a reactive type in the HTTP client response, so that is a hint
-for Micronaut to make it non-blocking.
+Finally, the mocking client:
+
+[source,groovy]
+----
+include::./ex03/solution/fixtures/src/test/groovy/fixtures/ClubsClientMock.groovy[tag=class]
+----
 
 icon:hand-o-right[] We also need a `Club` POGO to capture the JSON response from `clubs`. Define
 it with 2 string fields: `name` and `stadium`.

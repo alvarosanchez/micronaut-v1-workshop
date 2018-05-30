@@ -25,11 +25,11 @@ class FixtureServiceSpec extends Specification {
 
         then:
         view.date == now
-        view.homeClubName == "Real Madrid CF"
+        view.homeClubName == "CD Leganes"
         view.homeScore == 5
-        view.awayClubName == "FC Barcelona"
+        view.awayClubName == "Getafe CF"
         view.awayScore == 0
-        view.stadium == "Santiago Bernabeu"
+        view.stadium == "Butarque"
 
         cleanup:
         fixture.delete(flush: true)
