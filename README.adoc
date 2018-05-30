@@ -505,7 +505,6 @@ ifdef::generate-diagrams[]
 ....
 ClubsApi <<interface>>
 ClubsClient <<interface>>
-ClubsClientMock
 
 ClubsApi <|-- ClubsClient
 ClubsApi <|-- ClubsClientMock
