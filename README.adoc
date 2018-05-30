@@ -539,8 +539,6 @@ include::./ex03/solution/fixtures/src/main/groovy/fixtures/clubs/ClubsClient.gro
 ----
 <1> `"clubs"` is the Consul name for the Clubs microservice (which registers 
     itself with the `micronaut.application.name` property).
-<2> `@Recoverable` is an AOP advice that tells Micronaut to look for a `@Fallback`
-    whenever an exception is produced by this bean.
 
 Finally, the mocking client:
 
