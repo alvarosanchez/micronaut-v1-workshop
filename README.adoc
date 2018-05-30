@@ -489,6 +489,10 @@ run it directly from the `ex02/solution/clubs` folder:
 
     [ex02/solution/clubs] $ ./gradlew run
 
+TIP: Mocking services is technically possible with Micronaut, however, it would
+complicate unnecessarily the tests setup, so for the sake of simplicity, we are
+using a real instance of the `clubs` service.
+
 icon:hand-o-right[] Then, create the `Fixture` domain class with the following properties:
 
 [source,groovy]
@@ -513,7 +517,8 @@ include::./ex03/solution/fixtures/src/main/groovy/fixtures/clubs/ClubsClient.gro
 We are using a reactive type in the HTTP client response, so that is a hint
 for Micronaut to make it non-blocking.
 
-icon:hand-o-right[] We also need a `Club` POGO, with 2 string fields: `name` and `stadium`.
+icon:hand-o-right[] We also need a `Club` POGO to capture the JSON response from `clubs`. Define
+it with 2 string fields: `name` and `stadium`.
 
 icon:hand-o-right[] Now let's create a GORM Data Service for `Fixture` (named 
 `FixtureService`). In this case, instead of an interface, we are using an abstract
@@ -525,9 +530,6 @@ First, define the operations that we want GORM to implement automatically:
 ----
 include::./ex03/solution/fixtures/src/main/groovy/fixtures/service/FixtureService.groovy[tag=gorm-operations,indent=0]
 ----
-
-As you can see, we are again using reactive types in the return values, and GORM will
-figure out and implement it for us.
 
 In this service, we need to transform `Fixture` instances into a data transfer 
 object that contains club names and the stadium of the game. 
@@ -556,7 +558,17 @@ include::./ex03/solution/fixtures/src/main/groovy/fixtures/service/FixtureServic
 ----
 
 As the HTTP client is non-blocking, we can retrieve details about both clubs in 
-parallel, and then compose our response once we get both HTTP response.
+parallel, and then compose our response once we get both HTTP responses back from
+the other microservice.
+
+icon:hand-o-right[] Now, let's write a test for it:
+
+[source,groovy]
+----
+include::./ex03/solution/fixtures/src/test/groovy/fixtures/FixtureServiceSpec.groovy[]
+----
+
+Make sure it passes.
 
 === REST API (X minutes)
 
@@ -576,11 +588,20 @@ Then, implement the action:
 
 [source,groovy]
 ----
-include::./ex03/solution/fixtures/src/main/groovy/fixtures/controller/FixtureController.groovy[tag=service,indent=0]
+include::./ex03/solution/fixtures/src/main/groovy/fixtures/controller/FixtureController.groovy[tag=action,indent=0]
 ----
 
-=== Load some data for production (X minutes)
+The method `FixtureService.toView()` is reactive as it returns
+a `Maybe<FixtureView>`. It could be possible to change the action implementation
+so that the return type would be `Flowable<FixtureView>`, but it would complicate
+this example. Mastering reactive programming is not the main purpose of this
+workshop, so for the sake of simplicity, we are introducing a blocking call.
 
-* DataLoader
+icon:hand-o-right[] Now, we need to test it:
 
-=== See it in action (X minutes)
+[source,groovy]
+----
+include::./ex03/solution/fixtures/src/test/groovy/fixtures/FixtureControllerSpec.groovy[]
+----
+
+Run the test to ensure it passes.

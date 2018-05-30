@@ -1,21 +1,20 @@
 package fixtures.domain
 
 import grails.gorm.annotation.Entity
-
-import java.time.ZonedDateTime
+import org.bson.types.ObjectId
 
 @Entity
 class Fixture {
 
 //tag::fields[]
-//    ObjectId id
+    ObjectId id
     Long homeClubId
     Long awayClubId
 
     Short homeScore
     Short awayScore
 
-    ZonedDateTime date
+    Date date
 //end::fields[]
 
 }

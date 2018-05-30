@@ -1,7 +1,5 @@
 package fixtures.view
 
-import java.time.ZonedDateTime
-
 class FixtureView {
 
 //tag::fields[]
@@ -13,7 +11,7 @@ class FixtureView {
     Short homeScore
     Short awayScore
 
-    ZonedDateTime date
+    Date date
 //end::fields[]
 
 }

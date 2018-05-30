@@ -9,8 +9,6 @@ import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification
 
-import java.time.ZonedDateTime
-
 class FixtureServiceSpec extends Specification {
 
     @Shared @AutoCleanup EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer)
@@ -18,7 +16,7 @@ class FixtureServiceSpec extends Specification {
 
     void "it can get full details of a fixture"() {
         given:
-        ZonedDateTime now = ZonedDateTime.now()
+        Date now = new Date()
         Fixture fixture = new Fixture(homeClubId: 1, homeScore: 5, awayClubId: 2, awayScore: 0, date: now)
         fixture = fixtureService.save(fixture)
 
@@ -32,6 +30,9 @@ class FixtureServiceSpec extends Specification {
         view.awayClubName == "FC Barcelona"
         view.awayScore == 0
         view.stadium == "Santiago Bernabeu"
+
+        cleanup:
+        fixture.delete(flush: true)
     }
 
 }

@@ -1,12 +1,9 @@
 package fixtures.controller
 
-import fixtures.domain.Fixture
 import fixtures.service.FixtureService
 import fixtures.view.FixtureView
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
-import io.reactivex.Flowable
-
 
 @Controller("/")
 class FixtureController {
@@ -19,12 +16,12 @@ class FixtureController {
     }
 //end::service[]
 
+//tag::action[]
     @Get("/")
-    Flowable<FixtureView> listFixtures() {
-        return Flowable.<FixtureView>fromIterable (
-            fixtureService.findAll().collect {
-                fixtureService.toView(it).blockingGet()
-            }
-        )
+    List<FixtureView> findAll() {
+        fixtureService.findAll().collect {
+            fixtureService.toView(it).blockingGet()
+        }
     }
+//end::action[]
 }

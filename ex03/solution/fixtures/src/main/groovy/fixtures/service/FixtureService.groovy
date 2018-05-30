@@ -21,7 +21,6 @@ abstract class FixtureService {
 //tag::gorm-operations[]
     //GORM operations
     abstract Fixture save(@Valid Fixture fixture)
-//    abstract Flowable<Fixture> findAll()
     abstract List<Fixture> findAll()
 //end::gorm-operations[]
 

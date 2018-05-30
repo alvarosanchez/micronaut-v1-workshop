@@ -37,7 +37,6 @@ dependencyManagement {
 dependencies {
     annotationProcessor "io.micronaut:inject-java"
     compile "io.micronaut:http-client"
-//    compile "io.micronaut.configuration:mongo-reactive"
     compile "io.micronaut.configuration:mongo-gorm"
     compile "io.micronaut:inject"
     compile "io.micronaut:runtime"
