@@ -527,24 +527,24 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_application_architecture">Application architecture</a></li>
 <li><a href="#_getting_started_with_the_micronaut_cli_15_minutes">1. Getting started with the Micronaut CLI (15 minutes)</a>
 <ul class="sectlevel2">
-<li><a href="#_listing_profiles_x_minutes">1.1. Listing profiles (X minutes)</a></li>
-<li><a href="#_getting_information_about_a_profile_x_minutes">1.2. Getting information about a profile (X minutes)</a></li>
-<li><a href="#_creating_and_running_a_hello_galaxy_x_minutes">1.3. Creating and running a <em>hello galaxy</em> (X minutes)</a></li>
-<li><a href="#_write_an_automated_test_x_minutes">1.4. Write an automated test (X minutes)</a></li>
+<li><a href="#_listing_profiles_2_minutes">1.1. Listing profiles (2 minutes)</a></li>
+<li><a href="#_getting_information_about_a_profile_1_minute">1.2. Getting information about a profile (1 minute)</a></li>
+<li><a href="#_creating_and_running_a_hello_galaxy_10_minutes">1.3. Creating and running a <em>hello galaxy</em> (10 minutes)</a></li>
+<li><a href="#_write_an_automated_test_3_minutes">1.4. Write an automated test (3 minutes)</a></li>
 </ul>
 </li>
 <li><a href="#_creating_the_clubs_microservice_45_minutes">2. Creating the Clubs microservice (45 minutes)</a>
 <ul class="sectlevel2">
-<li><a href="#_gorm_layer_x_minutes">2.1. GORM layer (X minutes)</a></li>
-<li><a href="#_rest_api_x_minutes">2.2. REST API (X minutes)</a></li>
-<li><a href="#_load_some_data_for_production_x_minutes">2.3. Load some data for production (X minutes)</a></li>
-<li><a href="#_register_the_service_in_consul_x_minutes">2.4. Register the service in Consul (X minutes)</a></li>
+<li><a href="#_gorm_layer_10_minutes">2.1. GORM layer (10 minutes)</a></li>
+<li><a href="#_rest_api_20_minutes">2.2. REST API (20 minutes)</a></li>
+<li><a href="#_load_some_data_for_production_10_minutes">2.3. Load some data for production (10 minutes)</a></li>
+<li><a href="#_register_the_service_in_consul_5_minutes">2.4. Register the service in Consul (5 minutes)</a></li>
 </ul>
 </li>
 <li><a href="#_creating_the_fixtures_microservice_45_minutes">3. Creating the Fixtures microservice (45 minutes)</a>
 <ul class="sectlevel2">
-<li><a href="#_gorm_layer_x_minutes_2">3.1. GORM layer (X minutes)</a></li>
-<li><a href="#_rest_api_x_minutes_2">3.2. REST API (X minutes)</a></li>
+<li><a href="#_gorm_layer_25_minutes">3.1. GORM layer (25 minutes)</a></li>
+<li><a href="#_rest_api_20_minutes_2">3.2. REST API (20 minutes)</a></li>
 </ul>
 </li>
 </ul>
@@ -778,7 +778,7 @@ the <code>service</code> profile (designed for creation of microservice applicat
 the <code>create-controller</code> and <code>create-client</code> commands.</p>
 </div>
 <div class="sect2">
-<h3 id="_listing_profiles_x_minutes">1.1. Listing profiles (X minutes)</h3>
+<h3 id="_listing_profiles_2_minutes">1.1. Listing profiles (2 minutes)</h3>
 <div class="paragraph">
 <p><span class="icon"><i class="fa fa-hand-o-right"></i></span> You can list the available profiles with the <code>list-profiles</code> command:</p>
 </div>
@@ -812,7 +812,7 @@ dependencies to the build, more files to the project skeleton, etc.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_getting_information_about_a_profile_x_minutes">1.2. Getting information about a profile (X minutes)</h3>
+<h3 id="_getting_information_about_a_profile_1_minute">1.2. Getting information about a profile (1 minute)</h3>
 <div class="paragraph">
 <p><span class="icon"><i class="fa fa-hand-o-right"></i></span> To see all the features of a profile, you can
 use the <code>profile-info</code> command:</p>
@@ -863,7 +863,7 @@ Provided Features:
 </div>
 </div>
 <div class="sect2">
-<h3 id="_creating_and_running_a_hello_galaxy_x_minutes">1.3. Creating and running a <em>hello galaxy</em> (X minutes)</h3>
+<h3 id="_creating_and_running_a_hello_galaxy_10_minutes">1.3. Creating and running a <em>hello galaxy</em> (10 minutes)</h3>
 <div class="paragraph">
 <p>As explained avobe, the <code>create-app</code> command can be used to create new projects.
 It accepts some flags:</p>
@@ -994,7 +994,7 @@ Hello Galaxy!</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_write_an_automated_test_x_minutes">1.4. Write an automated test (X minutes)</h3>
+<h3 id="_write_an_automated_test_3_minutes">1.4. Write an automated test (3 minutes)</h3>
 <div class="paragraph">
 <p>While testing manually is acceptable in some situations, going forward it is
 better to have automated tests to exercise our applications. Fortunately,
@@ -1078,7 +1078,7 @@ has been already created for you, no need to run <code>mn create-app</code> this
 <p>In this exercise we are creating the <code>clubs</code> microservice.</p>
 </div>
 <div class="sect2">
-<h3 id="_gorm_layer_x_minutes">2.1. GORM layer (X minutes)</h3>
+<h3 id="_gorm_layer_10_minutes">2.1. GORM layer (10 minutes)</h3>
 <div class="paragraph">
 <p><span class="icon"><i class="fa fa-hand-o-right"></i></span> Let&#8217;s define first a <code>Club</code> domain class under
 <code>src/main/groovy/clubs/domain/Club.groovy</code> with 2 string attributes:
@@ -1180,7 +1180,7 @@ as an argument the entity they operate with. In this case, it would be <code>@Se
 </div>
 </div>
 <div class="sect2">
-<h3 id="_rest_api_x_minutes">2.2. REST API (X minutes)</h3>
+<h3 id="_rest_api_20_minutes">2.2. REST API (20 minutes)</h3>
 <div class="paragraph">
 <p>Micronaut helps you writing both the client and server sides of a REST API. In this service,
 we are going to create the following:</p>
@@ -1295,7 +1295,7 @@ The controller actions need to be annotated with <code>io.micronaut.http.annotat
 </div>
 </div>
 <div class="sect2">
-<h3 id="_load_some_data_for_production_x_minutes">2.3. Load some data for production (X minutes)</h3>
+<h3 id="_load_some_data_for_production_10_minutes">2.3. Load some data for production (10 minutes)</h3>
 <div class="paragraph">
 <p>During our tests, we have been seeding test data on demand, as it is a good
 practise to isolate test data from test to test. However, for production, we
@@ -1380,7 +1380,7 @@ which can be specified as not running under tests.</td>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_register_the_service_in_consul_x_minutes">2.4. Register the service in Consul (X minutes)</h3>
+<h3 id="_register_the_service_in_consul_5_minutes">2.4. Register the service in Consul (5 minutes)</h3>
 <div class="paragraph">
 <p>We want the <code>clubs</code> microservice to be discoverable by the <code>fixtures</code> service.
 So we will enable Micronaut&#8217;s Consul support for service discovery.</p>
@@ -1463,7 +1463,7 @@ Change to the <code>ex03/fixtures</code> directory to work on this exercise.
 <p>In this exercise we are creating the <code>fixtures</code> microservice.</p>
 </div>
 <div class="sect2">
-<h3 id="_gorm_layer_x_minutes_2">3.1. GORM layer (X minutes)</h3>
+<h3 id="_gorm_layer_25_minutes">3.1. GORM layer (25 minutes)</h3>
 <div class="paragraph">
 <p><span class="icon"><i class="fa fa-hand-o-right"></i></span> First of all, run MongoDB with Docker:</p>
 </div>
@@ -1664,7 +1664,7 @@ the other microservice.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_rest_api_x_minutes_2">3.2. REST API (X minutes)</h3>
+<h3 id="_rest_api_20_minutes_2">3.2. REST API (20 minutes)</h3>
 <div class="paragraph">
 <p><span class="icon"><i class="fa fa-hand-o-right"></i></span> Let&#8217;s create a controller for displaying fixtures:</p>
 </div>
@@ -1756,7 +1756,7 @@ workshop, so for the sake of simplicity, we are introducing a blocking call.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-05-30 03:03:37 CEST
+Last updated 2018-05-30 03:43:32 CEST
 </div>
 </div>
 </body>
