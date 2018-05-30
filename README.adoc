@@ -138,7 +138,7 @@ from a profile typically are specific to the profile application type; for examp
 the `service` profile (designed for creation of microservice applications) provides 
 the `create-controller` and `create-client` commands.
 
-=== Listing profiles (X minutes)
+=== Listing profiles (2 minutes)
 
 icon:hand-o-right[] You can list the available profiles with the `list-profiles` command:
 
@@ -158,7 +158,7 @@ Applications generated from a profile can be personalised with **features**. A
 feature further customises the newly created project by adding additional 
 dependencies to the build, more files to the project skeleton, etc.
 
-=== Getting information about a profile (X minutes)
+=== Getting information about a profile (1 minute)
 
 icon:hand-o-right[] To see all the features of a profile, you can
 use the `profile-info` command:
@@ -206,7 +206,7 @@ Provided Features:
 * tracing-zipkin - Adds support for distributed tracing with Zipkin (https://zipkin.io)
 ----
 
-=== Creating and running a _hello galaxy_ (X minutes)
+=== Creating and running a _hello galaxy_ (10 minutes)
 
 As explained avobe, the `create-app` command can be used to create new projects.
 It accepts some flags:
@@ -281,7 +281,7 @@ $ curl 0:8080/hello
 Hello Galaxy!
 ----
 
-=== Write an automated test (X minutes)
+=== Write an automated test (3 minutes)
 
 While testing manually is acceptable in some situations, going forward it is 
 better to have automated tests to exercise our applications. Fortunately,
@@ -315,7 +315,7 @@ has been already created for you, no need to run `mn create-app` this time.
 
 In this exercise we are creating the `clubs` microservice.
 
-=== GORM layer (X minutes)
+=== GORM layer (10 minutes)
 
 icon:hand-o-right[] Let's define first a `Club` domain class under
 `src/main/groovy/clubs/domain/Club.groovy` with 2 string attributes:
@@ -346,7 +346,7 @@ include::./ex02/solution/clubs/src/test/groovy/clubs/ClubServiceSpec.groovy[tag=
 <1> `grails.gorm.transactions.Rollback` applies a transaction that always rolls back.
 <2> Instead of any kind of injection, we simply get the bean from the application context.
 
-=== REST API (X minutes)
+=== REST API (20 minutes)
 
 Micronaut helps you writing both the client and server sides of a REST API. In this service,
 we are going to create the following:
@@ -397,7 +397,7 @@ include::./ex02/solution/clubs/src/test/groovy/clubs/ClubControllerSpec.groovy[t
 ----
 <1> Wrap write operations with `grails.gorm.transactions.Transactional`
 
-=== Load some data for production (X minutes)
+=== Load some data for production (10 minutes)
 
 During our tests, we have been seeding test data on demand, as it is a good
 practise to isolate test data from test to test. However, for production, we 
@@ -429,7 +429,7 @@ You should see an output similar to:
 
     03:05:56.704 [main] DEBUG clubs.init.DataLoader - Loading sample data
 
-=== Register the service in Consul (X minutes)
+=== Register the service in Consul (5 minutes)
 
 We want the `clubs` microservice to be discoverable by the `fixtures` service.
 So we will enable Micronaut's Consul support for service discovery.
@@ -478,7 +478,7 @@ TIP: Change to the `ex03/fixtures` directory to work on this exercise.
 
 In this exercise we are creating the `fixtures` microservice.
 
-=== GORM layer (X minutes)
+=== GORM layer (25 minutes)
 
 icon:hand-o-right[] First of all, run MongoDB with Docker:
 
@@ -570,7 +570,7 @@ include::./ex03/solution/fixtures/src/test/groovy/fixtures/FixtureServiceSpec.gr
 
 Make sure it passes.
 
-=== REST API (X minutes)
+=== REST API (20 minutes)
 
 icon:hand-o-right[] Let's create a controller for displaying fixtures:
 
