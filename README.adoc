@@ -143,9 +143,11 @@ the `create-controller` and `create-client` commands.
 icon:hand-o-right[] You can list the available profiles with the `list-profiles` command:
 
 ----
-$ mn list-profiles                                                                                     
+$ mn list-profiles
 | Available Profiles
 --------------------
+* function-aws - The function profile for AWS Lambda
+* function - The function profile
 * federation - The federation profile
 * service - The service profile
 * base - The base profile
