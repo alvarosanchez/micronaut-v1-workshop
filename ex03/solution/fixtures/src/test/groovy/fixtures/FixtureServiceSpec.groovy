@@ -18,7 +18,11 @@ class FixtureServiceSpec extends Specification {
         given:
         Date now = new Date()
         Fixture fixture = new Fixture(homeClubId: 1, homeScore: 5, awayClubId: 2, awayScore: 0, date: now)
+        when:
         fixture = fixtureService.save(fixture)
+
+        then:
+        fixtureService.count() == old(fixtureService.count()) + 1
 
         when:
         FixtureView view = fixtureService.toView(fixture).blockingGet()

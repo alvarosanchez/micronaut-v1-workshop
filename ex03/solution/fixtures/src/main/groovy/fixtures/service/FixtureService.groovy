@@ -22,6 +22,7 @@ abstract class FixtureService {
     //GORM operations
     abstract Fixture save(@Valid Fixture fixture)
     abstract List<Fixture> findAll()
+    abstract Number count()
 //end::gorm-operations[]
 
 //tag::to-view[]
