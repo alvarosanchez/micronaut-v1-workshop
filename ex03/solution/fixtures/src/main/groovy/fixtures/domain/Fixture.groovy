@@ -1,8 +1,10 @@
 package fixtures.domain
 
 import grails.gorm.annotation.Entity
+import groovy.transform.CompileStatic
 import org.bson.types.ObjectId
 
+@CompileStatic
 @Entity
 class Fixture {
 
