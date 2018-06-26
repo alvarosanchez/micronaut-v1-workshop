@@ -16,12 +16,12 @@ class ClubControllerSpec extends Specification {
     @Shared @AutoCleanup EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer)
     @Shared ClubsClient client = embeddedServer.applicationContext.getBean(ClubsClient)
     @Shared ClubService service = embeddedServer.applicationContext.getBean(ClubService)
-    @Shared Long id
+    @Shared List<Club> clubs = []
 
     @Transactional // <1>
     void setupSpec() {
-        id = service.save("Real Madrid CF", "Santiago Bernabeu").id
-        service.save("FC Barcelona", "Camp Nou")
+        clubs << service.save("Real Madrid CF", "Santiago Bernabeu")
+        clubs << service.save("FC Barcelona", "Camp Nou")
     }
 
     @Transactional // <1>
@@ -34,12 +34,14 @@ class ClubControllerSpec extends Specification {
         List<Club> response = client.listClubs()
 
         then:
-        response.size() == 2
+        response.size() == clubs.size()
     }
 
     void "test find one"() {
+        given:
+        Long realMadridId = clubs.find { it.name == 'Real Madrid CF'}.id
         when:
-        Club club = client.show(id)
+        Club club = client.show(realMadridId)
 
         then:
         club.name == 'Real Madrid CF'
