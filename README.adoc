@@ -210,7 +210,7 @@ Provided Features:
 
 === Creating and running a _hello galaxy_ (10 minutes)
 
-As explained avobe, the `create-app` command can be used to create new projects.
+As explained above, the `create-app` command can be used to create new projects.
 It accepts some flags:
 
 .Create-App Flags
