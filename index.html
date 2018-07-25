@@ -515,12 +515,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel1">
 <li><a href="#_software_requirements">Software Requirements</a>
 <ul class="sectlevel2">
-<li><a href="#_micronaut_cli">Micronaut CLI</a>
-<ul class="sectlevel3">
-<li><a href="#_option_1_recommended_using_sdkman">Option 1 (recommended): using SDKMAN!</a></li>
-<li><a href="#_option_2_from_a_zip_file">Option 2: from a ZIP file</a></li>
-</ul>
-</li>
+<li><a href="#_micronaut_cli">Micronaut CLI</a></li>
 <li><a href="#_clone_this_repository">Clone this repository</a></li>
 </ul>
 </li>
@@ -606,8 +601,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="sect2">
 <h3 id="_micronaut_cli">Micronaut CLI</h3>
-<div class="sect3">
-<h4 id="_option_1_recommended_using_sdkman">Option 1 (recommended): using SDKMAN!</h4>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -626,73 +619,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="literalblock">
 <div class="content">
 <pre>$ mn --version
-| Micronaut Version: 1.0.0-SNAPSHOT
-| Groovy Version: 2.5.0-rc-3
+| Micronaut Version: 1.0.0.M3
 | JVM Version: 1.8.0_131</pre>
 </div>
 </div>
 </li>
 </ol>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_option_2_from_a_zip_file">Option 2: from a ZIP file</h4>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Clone <a href="https://github.com/micronaut-projects/micronaut-profiles/">this repo</a> on your computer, and run:</p>
-<div class="literalblock">
-<div class="content">
-<pre>./gradlew publishToMavenLocal</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Grab the latest <code>-dist.zip</code> file from <a href="https://oss.sonatype.org/content/groups/public/io/micronaut/cli/1.0.0-SNAPSHOT/" class="bare">https://oss.sonatype.org/content/groups/public/io/micronaut/cli/1.0.0-SNAPSHOT/</a>:</p>
-<div class="literalblock">
-<div class="content">
-<pre>$ wget https://oss.sonatype.org/content/groups/public/io/micronaut/cli/1.0.0-SNAPSHOT/cli-1.0.0-20180526.063403-21-dist.zip -O micronaut-cli.zip</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Unzip it under a desired location (eg: <code>/usr/local/micronaut</code>):</p>
-<div class="literalblock">
-<div class="content">
-<pre>$ sudo unzip micronaut-cli.zip -d /usr/local/micronaut
-Password:
-Archive:  micronaut-cli.zip
-  inflating: /usr/local/micronaut/cli-1.0.0-SNAPSHOT.jar
-  inflating: /usr/local/micronaut/LICENSE
-  creating: /usr/local/micronaut/bin/
-  inflating: /usr/local/micronaut/bin/mn.bat
-  inflating: /usr/local/micronaut/bin/mn
-  creating: /usr/local/micronaut/media/
-  inflating: /usr/local/micronaut/media/mn.icns</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Link the <code>mn</code> command-line into a directory belonging to your <code>$PATH</code> (eg: <code>/usr/local/bin</code>):</p>
-<div class="literalblock">
-<div class="content">
-<pre>$ sudo ln -s /usr/local/micronaut/bin/mn /usr/local/bin/</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Ensure the CLI is installed properly:</p>
-<div class="literalblock">
-<div class="content">
-<pre>$ mn --version
-| Micronaut Version: 1.0.0-SNAPSHOT
-| Groovy Version: 2.5.0-rc-3
-| JVM Version: 1.8.0_131</pre>
-</div>
-</div>
-</li>
-</ol>
-</div>
 </div>
 </div>
 <div class="sect2">
@@ -787,6 +719,8 @@ the <code>create-controller</code> and <code>create-client</code> commands.</p>
 <pre>$ mn list-profiles
 | Available Profiles
 --------------------
+* function-aws - The function profile for AWS Lambda
+* function - The function profile
 * federation - The federation profile
 * service - The service profile
 * base - The base profile</pre>
@@ -820,45 +754,50 @@ use the <code>profile-info</code> command:</p>
 <div class="listingblock">
 <div class="content">
 <pre>$ mn profile-info service
-Profile: service
+| Profile: service
 --------------------
 The service profile
 
-Provided Commands:
+| Provided Commands:
 --------------------
-* help - Prints help information for a specific command
-* create-bean - Creates a singleton bean
-* create-job - Creates a job with scheduled method
-* create-client - Creates a client interface
-* create-controller - Creates a controller and associated test
+  create-bean        Creates a singleton bean
+  create-client      Creates a client interface
+  create-controller  Creates a controller and associated test
+  create-job         Creates a job with scheduled method
+  help               Prints help information for a specific command
 
-Provided Features:
+| Provided Features:
 --------------------
-* config-consul - Adds support for Distributed Configuration with Consul (https://www.consul.io)
-* discovery-consul - Adds support for Service Discovery with Consul (https://www.consul.io)
-* discovery-eureka - Adds support for Service Discovery with Eureka
-* groovy - Adds support for Groovy in the application
-* hibernate-gorm - Adds support for GORM persistence framework
-* hibernate-jpa - Adds support for Hibernate/JPA
-* http-client - Adds support for creating HTTP clients
-* http-server - Adds support for running a Netty server
-* java - Adds support for Java in the application
-* jdbc-dbcp - Configures SQL DataSource instances using Commons DBCP
-* jdbc-hikari - Configures SQL DataSource instances using Hikari Connection Pool
-* jdbc-tomcat - Configures SQL DataSource instances using Tomcat Connection Pool
-* junit - Adds support for the JUnit testing framework
-* kotlin - Adds support for Kotlin in the application
-* mongo-gorm - Configures GORM for MongoDB for Groovy applications
-* mongo-reactive - Adds support for the Mongo Reactive Streams Driver
-* neo4j-bolt - Adds support for the Neo4j Bolt Driver
-* neo4j-gorm - Configures GORM for Neo4j for Groovy applications
-* redis-lettuce - Configures the Lettuce driver for Redis
-* security-jwt - Adds support for JWT (JSON Web Token) based Authentication
-* security-session - Adds support for Session based Authentication
-* spek - Adds support for the Spek testing framewokr
-* spock - Adds support for the Spock testing framework
-* tracing-jaeger - Adds support for distributed tracing with Jaeger (https://www.jaegertracing.io)
-* tracing-zipkin - Adds support for distributed tracing with Zipkin (https://zipkin.io)</pre>
+  annotation-api    Adds Java annotation API
+  config-consul     Adds support for Distributed Configuration with Consul (https://www.consul.io)
+  discovery-consul  Adds support for Service Discovery with Consul (https://www.consul.io)
+  discovery-eureka  Adds support for Service Discovery with Eureka
+  groovy            Creates a Groovy application
+  hibernate-gorm    Adds support for GORM persistence framework
+  hibernate-jpa     Adds support for Hibernate/JPA
+  http-client       Adds support for creating HTTP clients
+  http-server       Adds support for running a Netty server
+  java              Creates a Java application
+  jdbc-dbcp         Configures SQL DataSource instances using Commons DBCP
+  jdbc-hikari       Configures SQL DataSource instances using Hikari Connection Pool
+  jdbc-tomcat       Configures SQL DataSource instances using Tomcat Connection Pool
+  jrebel            Adds support for class reloading with JRebel (requires separate JRebel installation)
+  junit             Adds support for the JUnit testing framework
+  kafka             Adds support for Kafka
+  kotlin            Creates a Kotlin application
+  mongo-gorm        Configures GORM for MongoDB for Groovy applications
+  mongo-reactive    Adds support for the Mongo Reactive Streams Driver
+  neo4j-bolt        Adds support for the Neo4j Bolt Driver
+  neo4j-gorm        Configures GORM for Neo4j for Groovy applications
+  picocli           Adds support for command line parsing (http://picocli.info)
+  redis-lettuce     Configures the Lettuce driver for Redis
+  security-jwt      Adds support for JWT (JSON Web Token) based Authentication
+  security-session  Adds support for Session based Authentication
+  spek              Adds support for the Spek testing framewokr
+  spock             Adds support for the Spock testing framework
+  springloaded      Adds support for class reloading with Spring-Loaded
+  tracing-jaeger    Adds support for distributed tracing with Jaeger (https://www.jaegertracing.io)
+  tracing-zipkin    Adds support for distributed tracing with Zipkin (https://zipkin.io)</pre>
 </div>
 </div>
 </div>
@@ -1790,7 +1729,7 @@ workshop, so for the sake of simplicity, we are introducing a blocking call.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-05-30 11:31:23 CEST
+Last updated 2018-07-25 09:44:10 CDT
 </div>
 </div>
 </body>
