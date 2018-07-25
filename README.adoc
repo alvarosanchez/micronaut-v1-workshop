@@ -209,11 +209,6 @@ $ mn create-app hello-galaxy --features groovy
 | Application created at /private/tmp/hello-galaxy
 ----
 
-WARNING: Currently, https://github.com/micronaut-projects/micronaut-profiles/issues/28[there is a bug]
-in the CLI that makes it generate a main `Application.java` class regardless of 
-the `groovy` feature being selected. However, the main `Application` class can be 
-left as is, and we will work with Groovy with the rest of the project.
-
 icon:hand-o-right[] Now, move into the generated `hello-galaxy` folder and let's 
 create a controller:
 
