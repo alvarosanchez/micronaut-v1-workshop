@@ -1718,7 +1718,27 @@ workshop, so for the sake of simplicity, we are introducing a blocking call.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="groovy"><span></span><span class="tok-n">Unresolved</span> <span class="tok-n">directive</span> <span class="tok-k">in</span> <span class="tok-n">README</span><span class="tok-o">.</span><span class="tok-na">adoc</span> <span class="tok-o">-</span> <span class="tok-nl">include:</span><span class="tok-o">:.</span><span class="tok-s">/ex03/</span><span class="tok-n">solution</span><span class="tok-s">/clubs/</span><span class="tok-n">src</span><span class="tok-s">/main/</span><span class="tok-n">groovy</span><span class="tok-s">/fixtures/</span><span class="tok-n">init</span><span class="tok-o">/</span><span class="tok-n">DataLoader</span><span class="tok-o">.</span><span class="tok-na">groovy</span><span class="tok-o">[</span><span class="tok-n">tag</span><span class="tok-o">=</span><span class="tok-n">class</span><span class="tok-o">]</span></code></pre>
+<pre class="pygments highlight"><code data-lang="groovy"><span></span><span class="tok-nd">@Slf4j</span>
+<span class="tok-nd">@Singleton</span>
+<span class="tok-nd">@Requires</span><span class="tok-o">(</span><span class="tok-n">notEnv</span> <span class="tok-o">=</span> <span class="tok-n">Environment</span><span class="tok-o">.</span><span class="tok-na">TEST</span><span class="tok-o">)</span>
+<span class="tok-kd">class</span> <span class="tok-nc">DataLoader</span> <span class="tok-kd">implements</span> <span class="tok-n">ApplicationEventListener</span><span class="tok-o">&lt;</span><span class="tok-n">ServerStartupEvent</span><span class="tok-o">&gt;</span> <span class="tok-o">{</span>
+
+    <span class="tok-kd">final</span> <span class="tok-n">FixtureService</span> <span class="tok-n">fixtureService</span>
+
+    <span class="tok-nf">DataLoader</span><span class="tok-o">(</span><span class="tok-n">FixtureService</span> <span class="tok-n">fixtureService</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+        <span class="tok-k">this</span><span class="tok-o">.</span><span class="tok-na">fixtureService</span> <span class="tok-o">=</span> <span class="tok-n">fixtureService</span>
+    <span class="tok-o">}</span>
+
+    <span class="tok-nd">@Override</span>
+    <span class="tok-kt">void</span> <span class="tok-nf">onApplicationEvent</span><span class="tok-o">(</span><span class="tok-n">ServerStartupEvent</span> <span class="tok-n">event</span><span class="tok-o">)</span> <span class="tok-o">{</span>
+        <span class="tok-k">if</span> <span class="tok-o">(!</span><span class="tok-n">fixtureService</span><span class="tok-o">.</span><span class="tok-na">count</span><span class="tok-o">())</span> <span class="tok-o">{</span>
+            <span class="tok-n">log</span><span class="tok-o">.</span><span class="tok-na">debug</span> <span class="tok-s2">&quot;Loading sample data&quot;</span>
+            <span class="tok-n">Fixture</span> <span class="tok-n">fixture</span> <span class="tok-o">=</span> <span class="tok-k">new</span> <span class="tok-n">Fixture</span><span class="tok-o">(</span><span class="tok-nl">homeClubId:</span> <span class="tok-mi">1</span><span class="tok-o">,</span> <span class="tok-nl">homeScore:</span> <span class="tok-mi">5</span><span class="tok-o">,</span> <span class="tok-nl">awayClubId:</span> <span class="tok-mi">2</span><span class="tok-o">,</span> <span class="tok-nl">awayScore:</span> <span class="tok-mi">0</span><span class="tok-o">,</span> <span class="tok-nl">date:</span> <span class="tok-k">new</span> <span class="tok-n">Date</span><span class="tok-o">())</span>
+            <span class="tok-n">fixtureService</span><span class="tok-o">.</span><span class="tok-na">save</span><span class="tok-o">(</span><span class="tok-n">fixture</span><span class="tok-o">)</span>
+        <span class="tok-o">}</span>
+    <span class="tok-o">}</span>
+<span class="tok-o">}</span>
+<span class="tok-c1">//end::class[]</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1747,7 +1767,7 @@ you will see an error:</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-07-25 11:26:38 CDT
+Last updated 2018-07-25 11:28:29 CDT
 </div>
 </div>
 </body>
