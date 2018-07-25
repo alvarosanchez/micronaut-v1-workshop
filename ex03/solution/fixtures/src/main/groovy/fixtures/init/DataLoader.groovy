@@ -23,7 +23,7 @@ class DataLoader implements ApplicationEventListener<ServerStartupEvent> {
     }
 
     @Override
-    void onApplicationEvent(ServerStartupEvent event) { // <4>
+    void onApplicationEvent(ServerStartupEvent event) {
         if (!fixtureService.count()) {
             log.debug "Loading sample data"
             Fixture fixture = new Fixture(homeClubId: 1, homeScore: 5, awayClubId: 2, awayScore: 0, date: new Date())

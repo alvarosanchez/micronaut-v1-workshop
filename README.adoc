@@ -607,7 +607,7 @@ icon:hand-o-right[] Similarly to the previous exercise, let's seed the applicati
 
 [source,groovy]
 ----
-include::./ex03/solution/clubs/src/main/groovy/fixtures/init/DataLoader.groovy[tag=class]
+include::./ex03/solution/fixtures/src/main/groovy/fixtures/init/DataLoader.groovy[tag=class]
 ----
 
 icon:hand-o-right[] Now, run the application:
