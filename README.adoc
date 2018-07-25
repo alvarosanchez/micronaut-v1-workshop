@@ -205,7 +205,7 @@ It accepts some flags:
 icon:hand-o-right[] Let's create a _hello galaxy_ project:
 
 ----
-$ mn create-app hello-galaxy -features groovy
+$ mn create-app hello-galaxy --features groovy
 | Application created at /private/tmp/hello-galaxy
 ----
 
