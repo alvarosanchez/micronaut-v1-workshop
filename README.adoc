@@ -600,3 +600,25 @@ include::./ex03/solution/fixtures/src/test/groovy/fixtures/FixtureControllerSpec
 ----
 
 Run the test to ensure it passes.
+
+=== Load some data and run the application (10 minutes)
+
+icon:hand-o-right[] Similarly to the previous exercise, let's seed the application with some data:
+
+[source,groovy]
+----
+include::./ex03/solution/clubs/src/main/groovy/fixtures/init/DataLoader.groovy[tag=class]
+----
+
+icon:hand-o-right[] Now, run the application:
+
+    ./gradlew run
+
+If you make a request to the default controller, and the `clubs` microservice is not running,
+you will see an error:
+
+----
+{"message":"Internal Server Error: No available services for ID: clubs"}
+----
+
+icon:hand-o-right[] Now, run the `clubs` service on a different terminal, and try the request again.

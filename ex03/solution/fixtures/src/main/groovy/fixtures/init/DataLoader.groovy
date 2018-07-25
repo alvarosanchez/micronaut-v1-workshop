@@ -10,6 +10,7 @@ import io.micronaut.runtime.server.event.ServerStartupEvent
 
 import javax.inject.Singleton
 
+//tag::class[]
 @Slf4j
 @Singleton
 @Requires(notEnv = Environment.TEST)
@@ -30,3 +31,4 @@ class DataLoader implements ApplicationEventListener<ServerStartupEvent> {
         }
     }
 }
+//end::class[]
