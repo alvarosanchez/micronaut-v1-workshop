@@ -10,7 +10,7 @@ buildscript {
 }
 
 version "0.1"
-group "clubs"
+group "fixtures"
 
 apply plugin:"io.spring.dependency-management"
 apply plugin:"com.github.johnrengelman.shadow"
