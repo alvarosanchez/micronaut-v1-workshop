@@ -187,19 +187,19 @@ It accepts some flags:
 
 |`build`
 |Build tool (one of `gradle`, `maven` - default is `gradle`)
-|`-build maven`
+|`--build maven`
 
 |`profile`
 |Profile to use for the project (default is `service`)
-|`-profile function-aws`
+|`--profile function-aws`
 
 |`features`
 |Features to use for the project, comma-separated
-|`-features security-jwt,mongo-gorm`
+|`--features security-jwt,mongo-gorm`
 
 |`inplace`
 |If present, generates the project in the current directory (project name is optional if this flag is set)
-|`-inplace`
+|`--inplace`
 |===
 
 icon:hand-o-right[] Let's create a _hello galaxy_ project:
