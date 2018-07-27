@@ -17,32 +17,32 @@ class ClubServiceSpec extends Specification {
     @Shared ClubService service = embeddedServer.applicationContext.getBean(ClubService) // <2>
 
     void "it can work with clubs"() {
-        expect:
-        service.count() == 0
-
         when:
         service.save("Real Madrid CF", "Bernabeu")
 
         then:
-        service.count() == 1
-
-        when:
-        List<Club> clubs = service.findAll()
-
-        then:
-        clubs.size() == 1
+        service.count() == old(service.count()) + 1
+        service.findAll().size() == old(service.findAll().size()) + 1
     }
 
-    void "it can show a club"() {
+    void "it can save and fetch a club"() {
         given:
-        Club club = service.save("CD Leganes", "Butarque")
+        final String name = 'CD Leganes'
+        final String stadium = 'Butarque'
 
         when:
-        service.find(club.id)
+        Club savedClub = service.save(name, stadium)
 
         then:
-        club.name == "CD Leganes"
-        club.stadium == "Butarque"
+        savedClub.name == name
+        savedClub.stadium == stadium
+
+        when:
+        Club club = service.find(savedClub.id)
+
+        then:
+        club.name == name
+        club.stadium == stadium
     }
 }
 //end::spec[]

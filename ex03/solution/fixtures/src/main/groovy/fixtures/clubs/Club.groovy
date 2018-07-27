@@ -1,8 +1,9 @@
 package fixtures.clubs
 
-class Club {
+import groovy.transform.CompileStatic
 
+@CompileStatic
+class Club {
     String name
     String stadium
-
 }

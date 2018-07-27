@@ -1,5 +1,8 @@
 package fixtures.view
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class FixtureView {
 
 //tag::fields[]
